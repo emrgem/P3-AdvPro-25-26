@@ -1,0 +1,87 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Headings */
+h1 {
+    color: #4fc3f7;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+}
+
+h3 {
+    color: #555;
+    margin: 15px 0 10px 0;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.badge.admin {
+    background: red;
+    color: white;
+}
+
+.badge.premium {
+    background: gold;
+    color: black;
+}
+
+/* Alert/Warning Box */
+.warning {
+    background: #ffd93d;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border-left: 5px solid #ff9500;
+}
+
+/* Points Section */
+.points-section {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+    border: 1px solid #90caf9;
+}
+
+.points-section h3 {
+    color: #1976d2;
+    margin-bottom: 10px;
+}
+
+.points-section p {
+    margin: 5px 0;
+    color: #555;
+}
+
+/* Paragraphs */
+p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+p em {
+    color: #666;
+    font-style: italic;
+}
