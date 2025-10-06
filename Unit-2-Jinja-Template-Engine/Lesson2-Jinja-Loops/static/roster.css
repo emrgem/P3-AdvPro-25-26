@@ -1,0 +1,139 @@
+/* Base styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Headings */
+h1 {
+    color: #4fc3f7;
+    text-align: center;
+    border-bottom: 3px solid #4fc3f7;
+    padding-bottom: 15px;
+}
+
+h2 {
+    color: #81c784;
+    margin-top: 30px;
+}
+
+/* Stats section */
+.stats {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f0f8ff;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+/* Table styles */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4fc3f7;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Highlight seniors (grade 12) */
+.senior {
+    background-color: #fff3cd;
+}
+
+.senior:hover {
+    background-color: #ffe69c;
+}
+
+/* Gender color coding */
+.male {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.female {
+    color: #cc0066;
+    font-weight: bold;
+}
+
+/* Row number styling */
+.row-number {
+    background-color: #e3f2fd;
+    font-weight: bold;
+    text-align: center;
+    color: #1976d2;
+    width: 50px;
+}
+
+/* Seniors list */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 10px;
+    margin: 5px 0;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 3px;
+}
+
+/* Navigation links */
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #81c784;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.back-link:hover {
+    background: #66bb6a;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    table {
+        font-size: 14px;
+    }
+    
+    th, td {
+        padding: 8px;
+    }
+}

@@ -1,0 +1,22 @@
+Id,Name,First,Last,Email,Birthday,Gender,Grade,Course
+1,Alice Smith,Alice,Smith,alice@school.edu,2006-03-15,F,12,CS101
+2,Bob Jones,Bob,Jones,bob@school.edu,2007-07-22,M,11,CS101
+3,Charlie Brown,Charlie,Brown,charlie@school.edu,2006-11-05,M,12,CS101
+4,Diana Prince,Diana,Prince,diana@school.edu,2007-09-30,F,11,CS101
+5,Ethan Hunt,Ethan,Hunt,ethan@school.edu,2006-12-18,M,12,CS101
+6,Fiona Green,Fiona,Green,fiona@school.edu,2008-01-25,F,10,CS101
+7,George Martin,George,Martin,george@school.edu,2007-05-14,M,11,CS101
+8,Hannah Lee,Hannah,Lee,hannah@school.edu,2006-08-09,F,12,CS101
+9,Ian Wright,Ian,Wright,ian@school.edu,2008-04-03,M,10,CS101
+10,Julia Roberts,Julia,Roberts,julia@school.edu,2007-10-21,F,11,CS101
+11,Kevin Hart,Kevin,Hart,kevin@school.edu,2006-06-12,M,12,CS101
+12,Laura Palmer,Laura,Palmer,laura@school.edu,2008-02-28,F,10,CS101
+13,Michael Scott,Michael,Scott,michael@school.edu,2007-11-07,M,11,CS101
+14,Nancy Drew,Nancy,Drew,nancy@school.edu,2006-04-19,F,12,CS101
+15,Oscar Isaac,Oscar,Isaac,oscar@school.edu,2008-03-16,M,10,CS101
+16,Pam Beesly,Pam,Beesly,pam@school.edu,2007-08-23,F,11,CS101
+17,Quinn Fabray,Quinn,Fabray,quinn@school.edu,2006-09-11,F,12,CS101
+18,Ryan Howard,Ryan,Howard,ryan@school.edu,2008-05-05,M,10,CS101
+19,Sarah Connor,Sarah,Connor,sarah@school.edu,2007-12-01,F,11,CS101
+20,Tom Hanks,Tom,Hanks,tom@school.edu,2006-07-04,M,12,CS101
+21,Uma Thurman,Uma,Thurman,uma@school.edu,2008-06-15,F,10,CS101
