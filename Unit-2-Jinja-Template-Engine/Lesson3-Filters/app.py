@@ -42,7 +42,8 @@ def home():
         <body>
             <h1>Class Roster Application</h1>
             <p>View the student roster for Advanced Programming</p>
-            <a href="/roster">View Roster</a>
+            <a href="/roster">👥View Roster</a>
+            <a href="/stats">📊View Stats</a>
         </body>
     </html>
     '''
@@ -52,5 +53,30 @@ def roster():
     students = read_roster()
     # print(students)
     return render_template('roster.html', students=students)   
+
+@app.route('/stats', methods=['GET'])
+def statistics():
+    students = read_roster()
+    # Calculate statistics
+    total = len(students)
+    seniors = [s for s in students if s['Grade'] == 12]
+    juniors = [s for s in students if s['Grade'] == 11]
+    sophomores = [s for s in students if s['Grade'] == 10]
+    freshmen = [s for s in students if s['Grade'] == 9]
+    males = [s for s in students if s['Gender'] == 'M']
+    females = [s for s in students if s['Gender'] == 'F']
+    
+    data = {
+    "students": students,
+    "total": total,
+    "seniors": seniors,
+    "juniors": juniors,
+    "sophomores": sophomores,
+    "freshmen": freshmen,
+    "males": males,
+    "females": females
+    }
+    return render_template('stats.html', **data)
+
 if __name__ == '__main__':
     app.run(debug=True)
