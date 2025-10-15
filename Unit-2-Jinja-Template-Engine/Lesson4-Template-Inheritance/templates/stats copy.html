@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='roster.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='stats.css')}}">
+</head>
+<body>
+    <div class="container">
+        <h1>📉Class Statistics - Advanced Programming</h1>
+        {# Summary Statistics using filters #}
+        <div class="stat-card">
+            <h3>Enrollment Summary:</h3>
+            <p>
+                <span class="stat-number">{{total}}</span>
+                total students enrolled
+            </p>
+        </div>
+        {#Grade Level Distribution#}
+        <h2>💹Grade Level Distribution</h2>
+        <div class="grid">
+            <div class="stat-card">
+                <h3>Seniors(Grade 12)</h3>
+                <p class="stat-number">{{seniors|length}}</p>
+                <p class="percentage">
+                    {{(seniors|length/total * 100)|round(1)}}%
+                </p>
+            </div>
+            <div class="stat-card">
+                <h3>Juniors(Grade 11)</h3>
+                <p class="stat-number">{{juniors|length}}</p>
+                <p class="percentage">
+                    {{(juniors|length/total * 100)|round(1)}}%
+                </p>
+            </div>
+            <div class="stat-card">
+                <h3>Sophomores(Grade 10)</h3>
+                <p class="stat-number">{{sophomores|length}}</p>
+                <p class="percentage">
+                    {{(sophomores|length/total * 100)|round(1)}}%
+                </p>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>
