@@ -16,8 +16,15 @@
     {% elif student.Grade == "9" %}(Freshmen)
     {% endif %}
     </p>
-
-
+    <p><strong>🧑‍🎓Gender:</strong>
+        <span class="{% if student.Gender == 'M' %}male{%else%}female{% endif %}">
+            {{student.Gender}}
+        </span>
+        <p><strong>📝Course:</strong>{{student.Course}}</p>
+    </p>
+    <div class="back-link" style="text-align:center; margin-top: 30px;">
+        <a href="/roster">⬅️Back to Roster</a>
+    </div>
     </div>
 
 </div>
