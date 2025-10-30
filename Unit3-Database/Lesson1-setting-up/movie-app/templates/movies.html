@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Movies - CineMatch{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="display-4 fw-bold mb-2">Browse Movies</h1>
+                <p class="text-muted lead">Explore our collection of {{ movies|length }} amazing films</p>
+            </div>
+        </div>
+
+        <!-- Movie Grid -->
+        <div class="row g-4">
+            {% for movie in movies %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card movie-card h-100 border-0 shadow-sm">
+                    <!-- Movie Poster -->
+                    <img src="{{ movie.poster_url }}" 
+                         class="card-img-top" 
+                         alt="{{ movie.title }}"
+                         style="height: 350px; object-fit: cover;">
+                    
+                    <!-- Movie Info -->
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        
+                        <!-- Year and Rating -->
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-calendar3 me-1"></i>{{ movie.year }}
+                            <span class="ms-3">
+                                <i class="bi bi-star-fill text-warning me-1"></i>{{ movie.rating }}
+                            </span>
+                        </p>
+                        
+                        <!-- Genre and Director -->
+                        <p class="card-text small text-muted mb-2">
+                            <i class="bi bi-tag me-1"></i>{{ movie.genre }}
+                        </p>
+                        <p class="card-text small text-muted mb-3">
+                            <i class="bi bi-camera-reels me-1"></i>{{ movie.director }}
+                        </p>
+                        
+                        <!-- Description -->
+                        <p class="card-text small flex-grow-1">
+                            {{ movie.description[:100] }}{% if movie.description|length > 100 %}...{% endif %}
+                        </p>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 mt-auto">
+                            <button class="btn btn-sm btn-primary" disabled>
+                                <i class="bi bi-info-circle me-1"></i>View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Empty State (if no movies) -->
+        {% if not movies %}
+        <div class="row">
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-film display-1 text-muted"></i>
+                <h3 class="mt-3">No movies found</h3>
+                <p class="text-muted">Check back later for new additions!</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .movie-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .movie-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+</style>
+{% endblock %}

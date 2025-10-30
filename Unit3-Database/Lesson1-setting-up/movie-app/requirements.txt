@@ -1,0 +1,11 @@
+# CineMatch Dependencies
+# Unit 3 - Lesson 3.1 STARTER
+
+# Flask Web Framework
+Flask==3.0.0
+
+# WSGI utility library
+Werkzeug==3.0.1
+
+# NOTE: SQLAlchemy will be added during Lesson 3.1 code-along!
+# Students will run: pip install flask-sqlalchemy
