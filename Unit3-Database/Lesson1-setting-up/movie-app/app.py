@@ -98,6 +98,8 @@ def load_initial_movies():
 
 @app.route('/')
 def index():
+    #Get the first 4 movies for homepage preview
+    movies = Movie.query.limit(4).all()
     """Homepage with hero section"""
     return render_template('index.html', movies=movies)
 
@@ -106,9 +108,9 @@ def index():
 def movies_list():
     """
     Display all movies
-    
     TODO (Later in Unit 3): Change this to query from database instead of list
     """
+    movies = Movie.query.order_by(Movie.rating.desc()).all()
     return render_template('movies.html', movies=movies)
 
 

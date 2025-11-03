@@ -4,7 +4,7 @@ db = SQLAlchemy()
 
 class Movie(db.Model):
     """"Movie Model - represents movie table in database"""
-    id = db.Column(db.Integer, primary=True)
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     year = db.Column(db.Integer)
     genre = db.Column(db.String(50))
