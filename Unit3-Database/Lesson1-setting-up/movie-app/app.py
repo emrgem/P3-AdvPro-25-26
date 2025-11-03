@@ -3,7 +3,7 @@ CineMatch - Movie Discovery Platform
 Lesson 3.1 STARTER CODE
 """
 from flask import Flask, render_template, request, redirect, url_for, flash
-from sample_movies import movies
+# from sample_movies import movies
 from models import db, Movie
 
 app = Flask(__name__)
@@ -82,6 +82,14 @@ def load_initial_movies():
                     poster_url="https://placehold.co/300x450/4facfe/ffffff?text=Dark+Knight"
                 )
             ]
+            # Add all the movies to the session(staging area)
+            for movie in movies:
+                db.session.add(movie)
+            #Commit to database (make changes permanent)
+            db.session.commit()
+            print(f"Added {len(movies)} movies to database!")
+        else:
+            print(f"Database already has {Movie.query.count()} movies!")
 
             
 # ============================
@@ -131,5 +139,10 @@ def internal_error(error):
 # =========================
 
 if __name__ == '__main__':
+    #create tables on first run
+    create_tables()
+    #load initial movies if database is empty
+    load_initial_movies()
+    
     # Debug mode: Shows errors and auto-reloads on code changes
     app.run(debug=True, port=5000)
