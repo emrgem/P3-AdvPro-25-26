@@ -119,6 +119,15 @@ def about():
     """About CineMatch page"""
     return render_template('about.html')
 
+@app.route('/add_movie', methods=['GET', 'POST'])
+def add_movie():
+    """Add a new movie to the database"""
+    if request.method == 'POST':
+        #We will add this next
+        pass
+    
+    #If GET request, just show the form
+    return render_template("add_movie.html")
 
 # ============================================================================
 # ERROR HANDLERS
