@@ -11,6 +11,12 @@
                 <p class="text-center mb-4">
                     Fill out the form below to add a movie to Cinematch
                 </p>
+                <form method='POST' action="{{url_for('add_movie')}}">
+                    <label for="title" class="form-label">
+                        Title <span class="text-danger">*</span>
+                    </label>
+                    
+                </form>
             </div>
         </div>
     </div>
