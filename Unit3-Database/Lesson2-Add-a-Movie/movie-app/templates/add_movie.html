@@ -12,10 +12,21 @@
                     Fill out the form below to add a movie to Cinematch
                 </p>
                 <form method='POST' action="{{url_for('add_movie')}}">
+                    
+                    <div class="mb-3">
                     <label for="title" class="form-label">
                         Title <span class="text-danger">*</span>
                     </label>
-                    
+                    <input type="text" name="title" id="title" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                    <label for="year" class="form-label">
+                        Release Year
+                    </label>
+                    <input type="number" name="year" id="year" class="form-control" min="1888" max="2030">
+                    </div>
+
                 </form>
             </div>
         </div>
