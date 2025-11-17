@@ -83,7 +83,24 @@ block content %}
               placeholder= "Enter a brief description of the movie"
             ></textarea>
           </div>
-          
+
+            <div class="mb-3">
+            <label for="poster_url" class="form-label"> Poster URL </label>
+            <input
+              type="url"
+              name="poster_url"
+              id="poster_url"
+              class="form-control"
+              placeholder="https://placehold.co/300x450/bgColor/textColor?text=MovieName"
+            />
+          </div>
+          <!-- Submit Buttons -->
+           <div class="d-grid gap-2 d-md-flex justift-content-center">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>
+                Add Movie
+            </button>
+           </div>
         </form>
       </div>
     </div>
