@@ -90,8 +90,7 @@ def load_initial_movies():
             print(f"Added {len(movies)} movies to database!")
         else:
             print(f"Database already has {Movie.query.count()} movies!")
-
-            
+         
 # ============================
 # ROUTES
 # ============================
@@ -123,9 +122,37 @@ def about():
 def add_movie():
     """Add a new movie to the database"""
     if request.method == 'POST':
-        #We will add this next
-        pass
-    
+        #request.form.get() - retrieves the value from the form field
+        #the parameter name must match the 'name' attribute in the HTML Form
+        title = request.form.get('title')
+        year = request.form.get('year', type=int) #converts str to int
+        genre = request.form.get('genre')
+        director = request.form.get('director')
+        rating = request.form.get('rating', type=float) #converts str to float
+        description = request.form.get('description')
+        poster_url = request.form.get('poster_url')
+        if not poster_url:
+            poster_url = f"https://placehold.co/300x450/gray/white?text={title}"
+
+        #Create a new movie object
+        new_movie = Movie(
+            title = title,
+            year = year,
+            genre = genre,
+            director = director,
+            rating = rating,
+            description = description,
+            poster_url = poster_url
+        )
+        
+        #Add to database session(stating area)
+        db.session.add(new_movie)
+        #Commit to database (make changes permanent)
+        db.session.commit()
+        
+        #Redirect to the movies list page
+        return redirect(url_for('movies_list'))
+        
     #If GET request, just show the form
     return render_template("add_movie.html")
 
