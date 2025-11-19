@@ -136,7 +136,7 @@ def add_movie():
 
         #Validation with better messages
         if not title:
-            flash("❌ Title is required! Please enter a movie Title!")
+            flash("❌ Title is required! Please enter a movie Title!","error")
             return redirect(url_for("add_movie"))
         
         #Create a new movie object

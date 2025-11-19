@@ -60,7 +60,10 @@
         </div>
     </nav>
 
-    <!-- Flash Messages -->
+
+
+    <!-- Main Content -->
+    <main>
         <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -74,9 +77,6 @@
             </div>
         {% endif %}
     {% endwith %}
-
-    <!-- Main Content -->
-    <main>
         {% block content %}{% endblock %}
     </main>
 
