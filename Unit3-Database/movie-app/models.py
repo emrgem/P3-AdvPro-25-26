@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
+from sqlalchemy import CheckConstraint
+
 db = SQLAlchemy()
 
 class Movie(db.Model):
@@ -14,6 +16,7 @@ class Movie(db.Model):
     poster_url = db.Column(db.String(500))
     # created_at = db.Column(db.DateTime, default=datetime.utcnow)
     created_at = db.Column(db.DateTime(timezone=True), default=lambda:datetime.now(timezone.utc))
+    
     
     def __repr__(self):
         return f"<Movie: {self.title} ({self.year})"
