@@ -175,8 +175,8 @@ def edit_movie(id):
         movie.rating = request.form.get('rating', type=float) #converts str to float
         movie.description = request.form.get('description')
         movie.poster_url = request.form.get('poster_url')
-        if not poster_url:
-            poster_url = f"https://placehold.co/300x450/gray/white?text={movie.title}"
+        if not movie.poster_url:
+            movie.poster_url = f"https://placehold.co/300x450/gray/white?text={movie.title}"
         # No db.session.add() needed! Object already tracked
         db.session.commit()
         flash(f'Movie "{movie.title}" updated', 'success')
