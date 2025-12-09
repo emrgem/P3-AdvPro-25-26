@@ -182,6 +182,21 @@ def edit_movie(id):
         flash(f'Movie "{movie.title}" updated', 'success')
         return redirect(url_for('movies_list'))
     return render_template('edit_movie.html', movie=movie)
+
+@app.route('/movie/<int:id>/delete', methods=['POST'])
+def delete_movie(id):
+    movie = Movie.query.get_or_404(id) #Get existing movie
+    #IMPORTANT: Save title before deleting
+    #After db.session.delete(). movie.title becomes None!
+    title = movie.title
+    # Delete from database
+    db.session.delete(movie)
+    db.session.commit()
+    #Flash a message with saved title
+    flash(f'🗑️Movie "{title}" deleted successfully,', 'success')
+    return redirect(url_for('movies_list'))
+    
+
 # ============================================================================
 # ERROR HANDLERS
 # ============================================================================
