@@ -74,54 +74,16 @@
                 </button>
               </form>
               #}
-              
+
               <!-- Button trigger modal -->
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn btn-danger"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
+                data-bs-target="#deleteModal{{movie.id}}"
               >
-                Launch demo modal
+                Delete
               </button>
-
-              <!-- Modal -->
-              <div
-                class="modal fade"
-                id="exampleModal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        Modal title
-                      </h1>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">...</div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        Close
-                      </button>
-                      <button type="button" class="btn btn-primary">
-                        Save changes
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <button class="btn btn-sm btn-primary" disabled>
                 <i class="bi bi-info-circle me-1"></i>View Details
@@ -130,7 +92,51 @@
           </div>
         </div>
       </div>
-
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="deleteModal{{movie.id}}"
+        tabindex="-1"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Confirm Delete
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete "<strong> {{movie.title}}</strong
+              >"
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <form
+                action="{{url_for('delete_movie', id=movie.id)}}"
+                method="POST"
+              >
+                <button class="btn btn-danger w-100" type="submit">
+                  <i class="bi bi-trash me-1"></i>Delete
+                </button>
+              </form>
+              <button type="button" class="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       {% endfor %}
     </div>
 
