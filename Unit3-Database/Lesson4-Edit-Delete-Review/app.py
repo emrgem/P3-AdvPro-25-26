@@ -195,6 +195,15 @@ def delete_movie(id):
     #Flash a message with saved title
     flash(f'🗑️Movie "{title}" deleted successfully,', 'success')
     return redirect(url_for('movies_list'))
+
+@app.route('/movie/<int:id>')
+def movie_detail(id):
+    # Query database for movie with this id
+    # get_or_404() automatically returns 404 if movie doesn't exist
+    movie = Movie.query.get_or_404(id)
+    
+    # Render the detail template with the movie data
+    return render_template('movie_detail.html', movie=movie)
     
 
 # ============================================================================
