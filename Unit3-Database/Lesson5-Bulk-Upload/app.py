@@ -207,6 +207,17 @@ def movie_detail(id):
 
 @app.route('/import_csv', methods=['GET', 'POST'])
 def import_csv():
+    if request.method == 'POST':
+        # Step1 - Get the uploaded file
+        file = request.files.get('csv_file')
+        # Step 2 Validate the file
+        if not file or file.filename == '':
+            flash("No file selected. Please choose a CSV file", 'error')
+            return redirect(url_for('import_csv'))
+        if not file.filename.lower().endswith()('.csv'):
+            flash("Invalid file type. Please upload a CSV file", 'error')
+            return redirect(url_for('import_csv'))
+            
     return render_template("import_csv.html")
     
 
