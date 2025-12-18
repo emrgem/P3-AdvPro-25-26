@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Import Movies from CSV - CineMatch{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Page Header -->
+                <div class="text-center mb-4">
+                    <h1 class="display-4 fw-bold">
+                        <i class="bi bi-file-earmark-spreadsheet text-success me-2"></i>
+                        Import Movies from CSV
+                    </h1>
+                    <p class="lead text-muted">
+                        Bulk import movies from a CSV file - add hundreds of movies in seconds!
+                    </p>
+                </div>
+                <!-- Upload Form Card -->
+                 <div class="card border-0 shadow-sm mb-4">
+                    <div class="car-body p-4">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-upload me-2">
+                            </i>Upload CSV File
+                        </h5>
+                        <!-- Upload Form -->
+                         <form action="{{url_for('import_csv')}}"
+                         method='POST' enctype="multipart/form-data">
+                         <!-- File Input -->
+                          <div class="mb-4">
+                            <label for="csv_file" class="form-label">
+                                Select CSV File <span class="text-danger">*</span>
+                            </label>
+                            <input type="file" name="csv_file" id="csv_file" accept=".csv" class="form-control form-control-lg" required>
+                          </div>
+                          <!-- Submit Buttons -->
+                           <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
+                            <!-- Back to Movies List -->
+                            <a href="{{ url_for('movies_list') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Movies
+                            </a>
+                            <!-- Import Button -->
+                            <button type="submit" class="btn btn-success btn-lg">
+                                 <i class="bi bi-cloud-upload me-2">
+                                    Import Movies
+                            </button>
+
+                          </div>
+
+
+                         </form>
+                    </div>
+                 </div>
+
+                <!-- Instructions Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-file-text me-2 text-primary"></i>
+                            CSV Format Requirements
+                        </h5>
+                        
+                        <p>Your CSV file should have a header row with column names. We support the following columns:</p>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>CSV Column</th>
+                                        <th>Maps To</th>
+                                        <th>Required?</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>Series_Title</code> or <code>title</code></td>
+                                        <td>Movie Title</td>
+                                        <td><span class="badge bg-danger">Required</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Released_Year</code> or <code>year</code></td>
+                                        <td>Release Year</td>
+                                        <td><span class="badge bg-secondary">Optional</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Genre</code> or <code>genre</code></td>
+                                        <td>Genre</td>
+                                        <td><span class="badge bg-secondary">Optional</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Director</code> or <code>director</code></td>
+                                        <td>Director</td>
+                                        <td><span class="badge bg-secondary">Optional</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>IMDB_Rating</code> or <code>rating</code></td>
+                                        <td>Rating (0-10)</td>
+                                        <td><span class="badge bg-secondary">Optional</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Overview</code> or <code>description</code></td>
+                                        <td>Description</td>
+                                        <td><span class="badge bg-secondary">Optional</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Poster_Link</code> or <code>poster_url</code></td>
+                                        <td>Poster Image URL</td>
+                                        <td><span class="badge bg-secondary">Optional</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Data Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-table me-2 text-info"></i>
+                            Sample CSV Format
+                        </h5>
+                        
+                        <div class="bg-dark text-light p-3 rounded" style="overflow-x: auto;">
+                            <code style="white-space: pre; font-size: 0.85em;">
+Series_Title,Released_Year,Genre,Director,IMDB_Rating,Overview,Poster_Link
+The Shawshank Redemption,1994,Drama,Frank Darabont,9.3,"Two imprisoned men...",https://example.com/poster.jpg
+The Godfather,1972,Crime,Francis Ford Coppola,9.2,"An organized crime...",https://example.com/poster2.jpg
+                            </code>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="bi bi-lightbulb me-1"></i>
+                                <strong>Tip:</strong> The IMDB Top 1000 dataset works perfectly with this importer!
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="card border-0 bg-light">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            Import Tips
+                        </h5>
+                        <ul class="mb-0">
+                            <li class="mb-2">
+                                <strong>Duplicates:</strong> Movies with the same title will be imported (no duplicate checking by default)
+                            </li>
+                            <li class="mb-2">
+                                <strong>Missing data:</strong> Rows without a title will be skipped
+                            </li>
+                            <li class="mb-2">
+                                <strong>Special characters:</strong> Quotes in descriptions are handled automatically
+                            </li>
+                            <li class="mb-2">
+                                <strong>Large files:</strong> Import happens in one batch commit for speed
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
