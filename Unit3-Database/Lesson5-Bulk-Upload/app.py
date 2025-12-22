@@ -5,6 +5,8 @@ Lesson 3.1 STARTER CODE
 from flask import Flask, render_template, request, redirect, url_for, flash
 # from sample_movies import movies
 from models import db, Movie
+import csv
+from utilities import get_csv_value, parse_rating, parse_year
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev-secret-key-change-in-production'
@@ -214,9 +216,62 @@ def import_csv():
         if not file or file.filename == '':
             flash("No file selected. Please choose a CSV file", 'error')
             return redirect(url_for('import_csv'))
-        if not file.filename.lower().endswith()('.csv'):
+        if not file.filename.lower().endswith('.csv'):
             flash("Invalid file type. Please upload a CSV file", 'error')
             return redirect(url_for('import_csv'))
+        #Step3 - Read and decode the file content
+        try:
+            file_content = file.read().decode("utf-8", errors="replace")
+            lines = file_content.splitlines()
+        except Exception as e:
+            flash(f"Error reading file:{str(e)}", "error")
+            return redirect(url_for("import_csv"))
+        #Step4 - Parse CSV with DictReader
+        csv_reader = csv.DictReader(lines)
+        imported_count = 0
+        skipped_count = 0
+        #Step5 - Process each row
+        try:
+            for row_num, row in enumerate(csv_reader, start=2):
+                #Get the title - REQUIRED field
+                title = get_csv_value(row, 'Series_Title', 'Title', "movie_title", "name", "title")
+                if not title:
+                    skipped_count +=1
+                    continue
+                # Get optional fields
+                year = parse_year(get_csv_value(row, "Released_Year", "year", "Year", "released_year"))
+                genre = get_csv_value(row, 'Genre', "genre", "genres")
+                director = get_csv_value(row, "Director", "director", "directed_by")
+                rating = parse_rating(get_csv_value(row, "IMDB_Rating", "rating", "Rating", "imdb_rating"))
+                description = get_csv_value(row, "Overview", "description", "plot", "Description", "summary")
+                poster_url = get_csv_value(row, "Poster_Link", "poster_url", "Poster")
+                if not poster_url:
+                    poster_url = f"https://placehold.co/300x450/gray/white?text={title}"
+                
+                # Create the Movie Object
+                movie = Movie(
+                    title = title,
+                    year = year,
+                    genre = genre,
+                    director = director,
+                    rating = rating,
+                    description = description,
+                    poster_url = poster_url   
+                )
+                db.session.add(movie)
+                imported_count +=1
+            #Step 6 - Commit
+            db.session.commit()
+            #Step7 - Provide user feedback
+            if imported_count > 0 :
+                flash(f"Successfully imported {imported_count} movies!", 'success')
+            if skipped_count > 0 :
+                flash(f"Skipped {skipped_count} row (missing title)!", 'warning')
+            return redirect(url_for('movies_list'))
+        except Exception as e :
+            db.session.rollback()
+            flash(f"Import Failed! {str(e)}", "error")
+            return redirect(url_for("import_csv"))
             
     return render_template("import_csv.html")
     
