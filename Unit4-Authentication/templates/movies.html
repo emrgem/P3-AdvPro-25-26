@@ -1,0 +1,299 @@
+{% extends "base.html" %} {% block title %}Browse Movies - CineMatch{% endblock
+%} {% block content %}
+<section class="py-5">
+  <div class="container">
+
+
+    <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-4 fw-bold mb-2">
+                    <i class="bi bi-search text-primary me-2"></i>Search Movies
+                </h1>
+                <p class="text-muted lead">Find your next favorite film</p>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SEARCH FORM
+             TODO: Students will add form attributes in class
+             ============================================================ -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        
+                        <!-- SEARCH FORM - Students complete the attributes -->
+                        <form method="GET" action="{{url_for('movies_list')}}">
+                            
+                            <div class="row g-3">
+                                
+                                <!-- Title Search Input -->
+                                <div class="col-md-4">
+                                    <label for="query" class="form-label">
+                                        <i class="bi bi-type me-1"></i>Search by Title
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="query"
+                                        placeholder="Enter movie title..."
+                                        name="query"
+                                        value = "{{query}}"
+                                    >
+                                    <!-- TODO: Add name="query" attribute -->
+                                    <!-- TODO: Add value="{{ query }}" for persistence -->
+                                </div>
+
+                                <!-- Genre Filter Dropdown -->
+                                <div class="col-md-3">
+                                    <label for="genre" class="form-label">
+                                        <i class="bi bi-tag me-1"></i>Genre
+                                    </label>
+                                    <select class="form-select" id="genre" name="genre">
+                                        <!-- TODO: Add name="genre" attribute -->
+                                        <option value="">All Genres</option>
+                                        <option value="Action" {% if selected_genre == "Action"%}selected{%endif%}>Action</option>
+                                        <option value="Comedy" {% if selected_genre == "Comedy"%}selected{%endif%}>Comedy</option>
+                                        <option value="Drama" {% if selected_genre == "Drama"%}selected{%endif%}>Drama</option>
+                                        <option value="Horror" {% if selected_genre == "Horror"%}selected{%endif%}>Horror</option>
+                                        <option value="Sci-Fi" {% if selected_genre == "Sci-Fi"%}selected{%endif%}>Sci-Fi</option>
+                                        <option value="Romance" {% if selected_genre == "Romance"%}selected{%endif%}>Romance</option>
+                                        <option value="Thriller" {% if selected_genre == "Thriller"%}selected{%endif%}>Thriller</option>
+                                        <option value="Animation" {% if selected_genre == "Animation"%}selected{%endif%}>Animation</option>
+                                        <option value="Documentary" {% if selected_genre == "Documentery"%}selected{%endif%}>Documentary</option>
+                                        <!-- TODO: Add selected attribute based on selected_genre -->
+                                    </select>
+                                </div>
+
+                                <!-- Year Filter -->
+                                <div class="col-md-2">
+                                    <label for="year" class="form-label">
+                                        <i class="bi bi-calendar3 me-1"></i>Year
+                                    </label>
+                                    <input 
+                                        type="number" 
+                                        class="form-control" 
+                                        id="year"
+                                        placeholder="e.g., 2010"
+                                        min="1888"
+                                        max="2030"
+                                        name = "year"
+                                    >
+                                    <!-- TODO: Add name="year" attribute -->
+                                    <!-- TODO: Add value="{{ selected_year }}" for persistence -->
+                                </div>
+
+                                <!-- Minimum Rating Filter -->
+                                <div class="col-md-3">
+                                    <label for="min_rating" class="form-label">
+                                        <i class="bi bi-star-fill text-warning me-1"></i>Min Rating
+                                    </label>
+                                    <select class="form-select" id="min_rating" name="min_rating">
+                                        <!-- TODO: Add name="min_rating" attribute -->
+                                        <option value="">Any Rating</option>
+                                        <option value="9">9+ ⭐ Masterpiece</option>
+                                        <option value="8">8+ ⭐ Excellent</option>
+                                        <option value="7">7+ ⭐ Good</option>
+                                        <option value="6">6+ ⭐ Above Average</option>
+                                        <option value="5">5+ ⭐ Average</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <!-- Search Buttons Row -->
+                            <div class="row mt-4">
+                                <div class="col-12 d-flex gap-2 justify-content-center">
+                                    <button type="submit" class="btn btn-primary px-4">
+                                        <i class="bi bi-search me-2"></i>Search
+                                    </button>
+                                    <a href="{{ url_for('movies_list') }}" class="btn btn-outline-secondary">
+                                        <i class="bi bi-x-circle me-2"></i>Clear Filters
+                                    </a>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- ============================================================
+             ACTIVE FILTERS DISPLAY
+             Shows users what filters are currently applied
+             ============================================================ -->
+        <!-- TODO: Uncomment when backend is connected
+        {% if query or selected_genre or selected_year or selected_min_rating %}
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-10">
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <span class="text-muted">Active Filters:</span>
+                    {% if query %}
+                    <span class="badge bg-primary">
+                        Title: "{{ query }}"
+                    </span>
+                    {% endif %}
+                    {% if selected_genre %}
+                    <span class="badge bg-success">
+                        Genre: {{ selected_genre }}
+                    </span>
+                    {% endif %}
+                    {% if selected_year %}
+                    <span class="badge bg-info">
+                        Year: {{ selected_year }}
+                    </span>
+                    {% endif %}
+                    {% if selected_min_rating %}
+                    <span class="badge bg-warning text-dark">
+                        Rating: {{ selected_min_rating }}+
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        -->
+
+    <!-- Movie Grid -->
+    <div class="row g-4">
+      {% for movie in movies %}
+      <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="card movie-card h-100 border-0 shadow-sm">
+          <!-- Movie Poster -->
+          <img
+            src="{{ movie.poster_url }}"
+            class="card-img-top"
+            alt="{{ movie.title }}"
+            style="height: 350px; object-fit: cover"
+          />
+
+          <!-- Movie Info -->
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ movie.title }}</h5>
+
+            <!-- Year and Rating -->
+            <p class="text-muted small mb-2">
+              <i class="bi bi-calendar3 me-1"></i>{{ movie.year }}
+              <span class="ms-3">
+                <i class="bi bi-star-fill text-warning me-1"></i>{{ movie.rating
+                }}
+              </span>
+            </p>
+
+            <!-- Genre and Director -->
+            <p class="card-text small text-muted mb-2">
+              <i class="bi bi-tag me-1"></i>{{ movie.genre }}
+            </p>
+            <p class="card-text small text-muted mb-3">
+              <i class="bi bi-camera-reels me-1"></i>{{ movie.director }}
+            </p>
+
+            <!-- Description -->
+            <p class="card-text small flex-grow-1">
+              {{ movie.description[:100] }}{% if movie.description|length > 100
+              %}...{% endif %}
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 mt-auto">
+              <!-- Edit Button -->
+              <a
+                href="{{url_for('edit_movie', id=movie.id)}}"
+                class="btn btn-sm btn-warning"
+              >
+                <i class="bi bi-pencil-square me-1"></i>
+                Edit
+              </a>
+          
+              <!-- Delete Button - Simple Form Without Modal-->
+                    {#}
+                     <form
+                        action="{{url_for('delete_movie', id=movie.id)}}"
+                        method="POST"
+                        >
+                        <button class="btn btn-danger w-100" type="submit">
+                        <i class="bi bi-trash me-1"></i>Delete
+                        </button>
+                     </form>
+                     {#}
+                     <button
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal{{ movie.id }}"
+                        >
+                     <i class="bi bi-trash"></i> Delete
+                     </button>
+
+
+                     <a class="btn btn-sm btn-primary" href="{{url_for('movie_detail', id=movie.id)}}">
+                     <i class="bi bi-info-circle me-1"></i>View Details
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- DELETE MODAL (still inside the loop!) -->
+         <div class="modal fade" id="deleteModal{{ movie.id }}" tabindex="-1">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title">Confirm Delete</h5>
+                     <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        ></button>
+                  </div>
+                  <div class="modal-body">
+                     Are you sure you want to delete "<strong>{{ movie.title }}</strong
+                        >"?
+                  </div>
+                  <div class="modal-footer">
+                     <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                        >
+                     Cancel
+                     </button>
+                     <form
+                        action="{{ url_for('delete_movie', id=movie.id) }}"
+                        method="POST"
+                        style="display: inline"
+                        >
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+    </div>
+
+    <!-- Empty State (if no movies) -->
+    {% if not movies %}
+    <div class="row">
+      <div class="col-12 text-center py-5">
+        <i class="bi bi-film display-1 text-muted"></i>
+        <h3 class="mt-3">No movies found</h3>
+        <p class="text-muted">Check back later for new additions!</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %} {% block extra_css %}
+<style>
+  .movie-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+</style>
+{% endblock %}

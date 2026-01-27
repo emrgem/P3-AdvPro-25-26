@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Register - CineMatch{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                
+                <!-- Registration Card -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        
+                        <!-- Header -->
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold">
+                                <i class="bi bi-person-plus text-primary me-2"></i>Create Account
+                            </h2>
+                            <p class="text-muted">
+                                Join CineMatch to create your personal watchlist
+                            </p>
+                        </div>
+                        
+                        <!-- ================================================
+                             REGISTRATION FORM - TODO: Build this form!
+                             
+                             Requirements:
+                             1. Form must POST to the register route
+                             2. You need 4 input fields:
+                                - username (text)
+                                - email (email)
+                                - password (password)
+                                - confirm_password (password)
+                             3. All fields are required
+                             4. Field names MUST match what routes.py expects!
+                             
+                             Hints:
+                             - Look at add_movie.html for form pattern
+                             - Use Bootstrap input-group for styling
+                             - Check routes.py to see expected field names
+                             ================================================ -->
+                        
+                        <form>
+                            <!-- TODO: Add method and action attributes to the form tag above -->
+                            
+                            
+                            <!-- USERNAME FIELD -->
+                            <!-- TODO: Create username input field -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    Username <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <!-- TODO: Add input element here -->
+                                    
+                                </div>
+                                <div class="form-text">3-80 characters, must be unique</div>
+                            </div>
+                            
+                            
+                            <!-- EMAIL FIELD -->
+                            <!-- TODO: Create email input field -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    Email <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <!-- TODO: Add input element here -->
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                            <!-- PASSWORD FIELD -->
+                            <!-- TODO: Create password input field -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    Password <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <!-- TODO: Add input element here -->
+                                    
+                                </div>
+                                <div class="form-text">At least 6 characters</div>
+                            </div>
+                            
+                            
+                            <!-- CONFIRM PASSWORD FIELD -->
+                            <!-- TODO: Create confirm password input field -->
+                            <div class="mb-4">
+                                <label for="confirm_password" class="form-label">
+                                    Confirm Password <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </span>
+                                    <!-- TODO: Add input element here -->
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-person-plus me-2"></i>Create Account
+                                </button>
+                            </div>
+                            
+                        </form>
+                        
+                        <!-- Divider -->
+                        <hr class="my-4">
+                        
+                        <!-- Login Link -->
+                        <p class="text-center mb-0">
+                            Already have an account? 
+                            <a href="{{ url_for('login') }}" class="text-decoration-none fw-bold">
+                                Log in here
+                            </a>
+                        </p>
+                        
+                    </div>
+                </div>
+                
+                <!-- Security Note -->
+                <div class="text-center mt-3">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Your password is securely hashed - we never store it in plain text!
+                    </small>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+    
+    .input-group .form-control {
+        border-left: none;
+    }
+</style>
+{% endblock %}

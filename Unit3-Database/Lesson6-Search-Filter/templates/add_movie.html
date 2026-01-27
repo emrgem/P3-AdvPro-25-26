@@ -1,0 +1,127 @@
+{% extends "base.html" %} {% block title %}Add Movie{% endblock title %} {%
+block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold mb-4 text-center">Add New Movie</h1>
+        <p class="text-center mb-4">
+          Fill out the form below to add a movie to Cinematch
+        </p>
+        <!-- ================================================================
+             BULK IMPORT BUTTON - Links to CSV import page
+             Added in Lesson 3.3 for bulk operations
+             ================================================================ -->
+        <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+          <i class="bi bi-lightbulb-fill me-3 fs-4"></i>
+          <div class="flex-grow-1">
+            <strong>Have many movies to add?</strong>
+            <p class="mb-0 small">Import hundreds of movies at once from a CSV file!</p>
+          </div>
+          <a href="{{ url_for('import_csv') }}" class="btn btn-success ms-3">
+            <i class="bi bi-file-earmark-spreadsheet me-1"></i>
+            Bulk Import
+          </a>
+        </div>
+
+
+
+        <form method="POST" action="{{url_for('add_movie')}}">
+          <div class="mb-3">
+            <label for="title" class="form-label">
+              Title <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              class="form-control"
+              {# required #}
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="year" class="form-label"> Release Year </label>
+            <input
+              type="number"
+              name="year"
+              id="year"
+              class="form-control"
+              min="1888"
+              max="2030"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="genre" class="form-label"> Genre </label>
+            <select name="genre" id="genre" class="form-select">
+              <option value="">Select a genre...</option>
+              <option value="Action">Action</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Drama">Drama</option>
+              <option value="Horror">Horror</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Romance">Romance</option>
+              <option value="Thriller">Thriller</option>
+              <option value="Animation">Animation</option>
+              <option value="Documentary">Documentary</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="rating" class="form-label"> Rating </label>
+            <input
+              type="number"
+              name="rating"
+              id="rating"
+              class="form-control"
+              min="0"
+              max="10"
+              step="0.1"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="director" class="form-label"> Director </label>
+            <input
+              type="text"
+              name="director"
+              id="director"
+              class="form-control"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label"> Description </label>
+            <textarea
+              name="description"
+              id="description"
+              class="form-control"
+              rows="4"
+              placeholder= "Enter a brief description of the movie"
+            ></textarea>
+          </div>
+
+            <div class="mb-3">
+            <label for="poster_url" class="form-label"> Poster URL </label>
+            <input
+              type="url"
+              name="poster_url"
+              id="poster_url"
+              class="form-control"
+              placeholder="https://placehold.co/300x450/bgColor/textColor?text=MovieName"
+            />
+          </div>
+          <!-- Submit Buttons -->
+           <div class="d-grid gap-2 d-md-flex justift-content-center">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>
+                Add Movie
+            </button>
+           </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

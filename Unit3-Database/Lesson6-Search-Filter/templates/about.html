@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}About CineMatch{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4 text-center">About CineMatch</h1>
+                
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>Our Mission
+                        </h2>
+                        <p class="lead">
+                            CineMatch helps movie lovers discover their next favorite film through personalized recommendations 
+                            and a curated collection of cinema's finest works.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">
+                            <i class="bi bi-code-square text-primary me-2"></i>Built With Modern Tech
+                        </h2>
+                        <p>
+                            CineMatch is a student project built with:
+                        </p>
+                        <ul>
+                            <li><strong>Flask</strong> - Python web framework</li>
+                            <li><strong>Bootstrap 5</strong> - Responsive design</li>
+                            <li><strong>SQLAlchemy</strong> - Database management (coming in Lesson 3.1!)</li>
+                            <li><strong>AI Integration</strong> - Personalized recommendations (coming later!)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">
+                            <i class="bi bi-book text-success me-2"></i>Learning Journey
+                        </h2>
+                        <p>
+                            This application is part of <strong>Unit 3: Database Foundation</strong> in our 
+                            CTE Web Development course. Throughout this unit, we'll learn:
+                        </p>
+                        <ul>
+                            <li>Database design and SQLAlchemy ORM</li>
+                            <li>CRUD operations (Create, Read, Update, Delete)</li>
+                            <li>Forms and user input validation</li>
+                            <li>Search and filtering functionality</li>
+                            <li>Pagination for large datasets</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5">
+                    <a href="{{ url_for('movies_list') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-collection-play me-2"></i>Explore Movies
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

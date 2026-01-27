@@ -1,0 +1,122 @@
+{% extends "base.html" %} {% block title %}Edit Movie{% endblock title %} {%
+block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold mb-4 text-center">Edit Movie</h1>
+        <p class="text-center mb-4">
+          Update the form below to edit Movie : '{{movie.title}}'
+        </p>
+        <form method="POST" action="{{url_for('edit_movie', id=movie.id)}}">
+          <div class="mb-3">
+            <label for="title" class="form-label">
+              Title <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              value="{{movie.title}}"
+              class="form-control"
+              {# required #}
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="year" class="form-label"> Release Year </label>
+            <input
+              type="number"
+              name="year"
+              id="year"
+              class="form-control"
+              min="1888"
+              max="2030"
+              value="{{movie.year}}"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="genre" class="form-label"> Genre </label>
+            <select name="genre" id="genre" class="form-select">
+              <option value="">Select a genre...</option>
+              <option value="Action" {% if movie.genre == 'Action'%}selected{%endif%}>Action</option>
+              <option value="Comedy" {% if movie.genre == 'Comedy'%}selected{%endif%}>Comedy</option>
+              <option value="Drama" {% if movie.genre == 'Drama'%}selected{%endif%}>Drama</option>
+              <option value="Horror" {% if movie.genre == 'Horror'%}selected{%endif%}>Horror</option>
+              <option value="Sci-Fi" {% if movie.genre == 'Sci-Fi'%}selected{%endif%}>Sci-Fi</option>
+              <option value="Romance" {% if movie.genre == 'Romance'%}selected{%endif%}>Romance</option>
+              <option value="Thriller" {% if movie.genre == 'Thriller'%}selected{%endif%}>Thriller</option>
+              <option value="Animation" {% if movie.genre == 'Animation'%}selected{%endif%}>Animation</option>
+              <option value="Documentary" {% if movie.genre == 'Documentery'%}selected{%endif%}>Documentary</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="rating" class="form-label"> Rating </label>
+            <input
+              type="number"
+              name="rating"
+              id="rating"
+              class="form-control"
+              min="0"
+              max="10"
+              step="0.1"
+              value="{{movie.rating if movie.rating else ''}}"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="director" class="form-label"> Director </label>
+            <input
+              type="text"
+              name="director"
+              id="director"
+              class="form-control"
+              value="{{movie.director}}"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label"> Description </label>
+            <textarea
+              name="description"
+              id="description"
+              class="form-control"
+              rows="4"
+              placeholder= "Enter a brief description of the movie"
+            >
+            {{movie.description}}
+          </textarea>
+          </div>
+
+            <div class="mb-3">
+            <label for="poster_url" class="form-label"> Poster URL </label>
+            <input
+              type="url"
+              name="poster_url"
+              id="poster_url"
+              class="form-control"
+              placeholder="https://placehold.co/300x450/bgColor/textColor?text=MovieName"
+              value="{{movie.poster_url}}"
+              />
+          </div>
+          
+          <!-- Submit Buttons -->
+           <div class="d-grid gap-2 d-md-flex justify-content-center">
+            <!-- Cancel Button -->
+           <a href="{{url_for('movies_list')}}" class="btn btn-outline-secondary">
+            <i class="bi bi-x-circle me-2"></i>
+            Cancel
+           </a>
+            <button type="submit" class="btn btn-warning">
+                <i class="bi bi-check-circle me-2"></i>
+                Update Movie
+            </button>
+           </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
