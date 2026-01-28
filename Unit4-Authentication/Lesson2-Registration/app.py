@@ -6,7 +6,9 @@
 from flask import Flask
 from routes import register_routes
 from db_init import init_db
-from models import db, Movie
+from models import db, Movie, User, bcrypt
+from flask_login import LoginManager, login_user, current_user
+
 
 # ============================================================================
 # APP CONFIGURATION
@@ -42,13 +44,14 @@ db.init_app(app)
 # ============================================================================
 
 # Step 1: Create LoginManager instance
-
+login_manager = LoginManager()
 # Step 2: Initialize with app
-
+login_manager.init_app(app)
 # Step 3: Set login view (name of login route)
-
+login_manager.login_view = 'login'
 # Step 4: Set login message and category
-
+login_manager.login_message = "Please log in to access this page!"
+login_manager.login_message_category = 'info'
 
 # ============================================================================
 # TODO 2: USER LOADER FUNCTION
@@ -68,7 +71,7 @@ db.init_app(app)
 def load_user(user_id):
     """Load user by ID for Flask-Login"""
     # TODO: Return the user with this ID from the database
-    
+    return User.query.get(int(user_id))
 
 
 # ============================================================================
