@@ -7,13 +7,13 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
 
 #TODO:Import UserMixin
-
+from flask_login import UserMixin
 #TODO:Import Bcrypt
-
+from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 
 #TODO: Bcrypt Instance
-
+bcrypt = Bcrypt()
 
 # ============================================================================
 # USER MODEL - TODO: Complete this model
@@ -27,7 +27,7 @@ db = SQLAlchemy()
 #   - check_password(): Verifies password during login
 # ============================================================================
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     """
     User Model - represents registered users of CineMatch
     
@@ -54,12 +54,12 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     
     # TODO: Add username column (String, max 80 chars, unique, required)
-    
+    username = db.Column(db.String(100), unique=True, nullable=False)
     # TODO: Add email column (String, max 120 chars, unique, required)
-    
+    email = db.Column(db.String(120), unique=True, nullable=False)
     # TODO: Add password_hash column (String, max 256 chars, required)
     # IMPORTANT: Name it password_hash, NOT password!
-    
+    password_hash = db.Column(db.String(256), unique=True, nullable=False)
     # Timestamp - already done for you
     created_at = db.Column(db.DateTime(timezone=True), 
                           default=lambda: datetime.now(timezone.utc))
@@ -87,7 +87,7 @@ class User(db.Model):
             password (str): The plain text password from the form
         """
         # TODO: Hash the password and store in self.password_hash
-    
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
     
     # ========================================================================
     # TODO 3: Implement check_password method
@@ -113,7 +113,7 @@ class User(db.Model):
             bool: True if password matches, False otherwise
         """
         # TODO: Check if password matches the stored hash
-    
+        return bcrypt.check_password_hash(self.password_hash,password)
     
     def __repr__(self):
         return f'<User {self.username}>'
