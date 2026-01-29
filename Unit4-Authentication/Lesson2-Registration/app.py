@@ -67,7 +67,7 @@ login_manager.login_message_category = 'info'
 # Hint: Use User.query.get() and convert user_id to int
 # ============================================================================
 
-# @login_manager.user_loader
+@login_manager.user_loader
 def load_user(user_id):
     """Load user by ID for Flask-Login"""
     # TODO: Return the user with this ID from the database

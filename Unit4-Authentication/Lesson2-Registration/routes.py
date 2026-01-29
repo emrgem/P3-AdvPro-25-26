@@ -6,9 +6,9 @@
 from flask import render_template, request, redirect, url_for, flash
 from utilities import get_csv_value, parse_year, parse_rating
 import csv
-from models import db, Movie
+from models import db, Movie, User
 
-# from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required, current_user
 
 
 def register_routes(app):
@@ -224,9 +224,9 @@ def register_routes(app):
         # If user is already authenticated, redirect them to home page.
         # Use: current_user.is_authenticated
         # ====================================================================
-        
+        if current_user.is_authenticated:
+            return redirect(url_for("index"))
 
-        
         
         if request.method == 'POST':
             # ================================================================
@@ -240,7 +240,10 @@ def register_routes(app):
             #
             # Pattern: request.form.get('field_name', '').strip()
             # ================================================================
-            
+            username = request.form.get("username")
+            email = request.form.get("email")
+            password = request.form.get("password")
+            confirm_password = request.form.get("confirm_password")
             
             
             # ================================================================
@@ -250,7 +253,9 @@ def register_routes(app):
             #   - Flash error message
             #   - Redirect back to register
             # ================================================================
-            
+            if not username or not email or not password:
+                flash("All fields are required!", 'error')
+                return redirect(url_for("register"))
 
             
             # ================================================================
@@ -260,9 +265,11 @@ def register_routes(app):
             #   - Flash error message: 'Passwords do not match!'
             #   - Redirect back to register
             # ================================================================
-            
+            if password != confirm_password:
+                flash("Passwords do not match!", 'error')
+                return redirect(url_for("register"))                
 
-            
+                
             # ================================================================
             # TODO 5: Validation - Check password length
             # 
@@ -270,8 +277,9 @@ def register_routes(app):
             #   - Flash error message
             #   - Redirect back to register
             # ================================================================
-            
-
+            if len(password) < 6:
+                flash("Password must be at least 6 characters.", 'error')
+                return redirect(url_for("register"))
             
             
             # ================================================================
@@ -283,16 +291,18 @@ def register_routes(app):
             # If it returns a user (not None), username is taken.
             # Flash error and redirect.
             # ================================================================
-            
-
-            
+            if User.query.filter_by(username=username).first():
+                flash("Username is already taken! Please choose another one.", 'error')
+                return redirect(url_for("register"))
             
             # ================================================================
             # TODO 7: Check if email already exists
             # 
             # Same pattern as username check above.
             # ================================================================
-            
+            if User.query.filter_by(email=email).first():
+                flash("Email is already registered! Please choose another one.", 'error')
+                return redirect(url_for("register"))            
 
             
             
@@ -309,11 +319,12 @@ def register_routes(app):
             # ================================================================
             
             # Create user object
-            
+            user = User(username=username, email=email)
             # Hash the password (THIS IS THE KEY LINE!)
-            
+            user.set_password(password)
             # Save to database
-            
+            db.session.add(user)
+            db.session.commit()
             
             # ================================================================
             # TODO 9: Auto-login and redirect
@@ -325,9 +336,9 @@ def register_routes(app):
             # ================================================================
             
             # Log the user in
-            
+            login_user(user)
             # Success message
-            
+            flash(f"Welcome to Cinematch, {username}")
             # Redirect to home
             return redirect(url_for('index'))
         
