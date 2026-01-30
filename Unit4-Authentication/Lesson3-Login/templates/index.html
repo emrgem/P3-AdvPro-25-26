@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}CineMatch - Discover Your Next Favorite Movie{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero-section text-white text-center py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 60vh; display: flex; align-items: center;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h1 class="display-3 fw-bold mb-4 animate-fade-in">
+                        Discover Your Next Favorite Movie
+                    </h1>
+                    <p class="lead mb-4 fs-4">
+                        AI-powered recommendations, curated collections, and personalized watchlists
+                    </p>
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <a href="{{ url_for('movies_list') }}" class="btn btn-light btn-lg px-5 py-3">
+                            <i class="bi bi-play-circle me-2"></i>Browse Movies
+                        </a>
+                        <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg px-5 py-3">
+                            <i class="bi bi-info-circle me-2"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5 display-5 fw-bold">Why Choose CineMatch?</h2>
+            
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="bi bi-robot fs-1 text-primary"></i>
+                            </div>
+                            <h3 class="h4 mb-3">AI-Powered Recommendations</h3>
+                            <p class="text-muted">
+                                Get personalized movie suggestions based on your taste and watch history using advanced AI algorithms.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="bi bi-bookmark-heart fs-1 text-danger"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Personal Watchlist</h3>
+                            <p class="text-muted">
+                                Save movies you want to watch later and track what you've already seen. Never forget a recommendation again.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="bi bi-star-fill fs-1 text-warning"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Rate & Review</h3>
+                            <p class="text-muted">
+                                Share your opinions with the community. Rate movies and write reviews to help others discover great films.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Movies Preview -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="display-6 fw-bold">Trending Now</h2>
+                <a href="{{ url_for('movies_list') }}" class="btn btn-outline-primary">
+                    View All <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Quick preview of first 4 movies -->
+                {% for movie in movies[:4] %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="card movie-card h-100 border-0 shadow-sm">
+                        <img src="{{ movie.poster_url }}" 
+                             class="card-img-top" 
+                             alt="{{ movie.title }}"
+                             style="height: 350px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ movie.title }}</h5>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-calendar3 me-1"></i>{{ movie.year }}
+                                <span class="ms-3">
+                                    <i class="bi bi-star-fill text-warning me-1"></i>{{ movie.rating }}
+                                </span>
+                            </p>
+                            <p class="card-text small text-muted">{{ movie.genre }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5 text-white text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <h2 class="display-5 fw-bold mb-4">Ready to Start Your Journey?</h2>
+            <p class="lead mb-4">
+                Join thousands of movie lovers discovering their next favorite film
+            </p>
+            <a href="{{ url_for('movies_list') }}" class="btn btn-light btn-lg px-5 py-3">
+                <i class="bi bi-collection-play me-2"></i>Explore Movies
+            </a>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+    
+    .movie-card {
+        transition: transform 0.2s ease;
+    }
+    
+    .movie-card:hover {
+        transform: scale(1.03);
+    }
+</style>
+{% endblock %}
