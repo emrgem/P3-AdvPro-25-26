@@ -363,7 +363,7 @@ def register_routes(app):
             user = User.query.filter_by(username=username).first()
             
             # Step 3 & 4 Verify Password and login
-            if user and user.check.password(password):
+            if user and user.check_password(password):
                 login_user(user)
                 flash(f"Welcome back, {user.username}!", "success")
                 return redirect(url_for("index"))
