@@ -365,7 +365,7 @@ def register_routes(app):
             # Step 3 & 4 Verify Password and login
             if user and user.check.password(password):
                 login_user(user)
-                flash(f"Welcome back, {user.username}!", 'success')
+                flash(f"Welcome back, {user.username}!", "success")
                 return redirect(url_for("index"))
             else:
                 #Step 5 - Handle Failure
