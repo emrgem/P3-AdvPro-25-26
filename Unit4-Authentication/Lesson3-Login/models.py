@@ -64,7 +64,7 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime(timezone=True), 
                           default=lambda: datetime.now(timezone.utc))
     
-    
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)
     # ========================================================================
     # TODO 2: Implement set_password method
     # 
@@ -139,3 +139,16 @@ class Movie(db.Model):
     
     def __repr__(self):
         return f"<Movie: {self.title} ({self.year})>"
+
+
+
+"""
+from models import User, db
+admin = User(username='admin', email='emrgem@bergen.org', is_admin=True)
+admin.set_password('admin123')
+db.session.add(admin)
+db.session.commit()
+exit()
+#check any admins accounts in the database
+User.query.filter_by(is_admin=True).all()
+"""
