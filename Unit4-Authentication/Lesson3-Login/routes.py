@@ -7,8 +7,25 @@ from flask import render_template, request, redirect, url_for, flash
 from utilities import get_csv_value, parse_year, parse_rating
 import csv
 from models import db, Movie, User
-
 from flask_login import login_user, logout_user, login_required, current_user
+from functools import wraps
+
+def admin_required(f):
+    """
+    Decorator that requires user to be logged in AND be an admin.
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Check if logged in
+        if not current_user.is_authenticated:
+            flash('Please log in to access this page.', 'warning')
+            return redirect(url_for('login'))
+        # Check if admin
+        if not current_user.is_admin:
+            flash('Admin access required.', 'error')
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def register_routes(app):
@@ -87,6 +104,7 @@ def register_routes(app):
     # ========================================================================
     
     @app.route('/add_movie', methods=['GET', 'POST'])
+    @admin_required
     def add_movie():
         """Add a new movie to the database"""
         if request.method == 'POST':
@@ -114,6 +132,7 @@ def register_routes(app):
     
     
     @app.route('/movie/<int:id>/edit', methods=['GET', 'POST'])
+    @admin_required
     def edit_movie(id):
         """Edit an existing movie"""
         movie = Movie.query.get_or_404(id)
@@ -136,6 +155,7 @@ def register_routes(app):
     
     
     @app.route('/movie/<int:id>/delete', methods=['POST'])
+    @admin_required
     def delete_movie(id):
         """Delete a movie from the database"""
         movie = Movie.query.get_or_404(id)
@@ -147,6 +167,7 @@ def register_routes(app):
     
     
     @app.route('/import_csv', methods=['GET', 'POST'])
+    @admin_required
     def import_csv():
         """Bulk import movies from a CSV file"""
         if request.method == 'POST':
@@ -381,6 +402,12 @@ def register_routes(app):
         flash("You have been logged out.", 'info')
         return redirect(url_for('index'))
         
+    
+    @app.route('/profile')
+    @login_required
+    def profile():
+        """User profile page"""
+        return render_template("profile.html", user=current_user)
     
     # ========================================================================
     # ERROR HANDLERS (No changes needed)

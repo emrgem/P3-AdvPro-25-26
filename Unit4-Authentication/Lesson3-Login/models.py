@@ -143,6 +143,7 @@ class Movie(db.Model):
 
 
 """
+flask shell
 from models import User, db
 admin = User(username='admin', email='emrgem@bergen.org', is_admin=True)
 admin.set_password('admin123')
