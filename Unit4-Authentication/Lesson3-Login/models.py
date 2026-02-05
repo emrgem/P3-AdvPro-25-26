@@ -143,13 +143,22 @@ class Movie(db.Model):
 
 
 """
+# Create an admin user in flask shell
 flask shell
 from models import User, db
-admin = User(username='admin', email='emrgem@bergen.org', is_admin=True)
-admin.set_password('admin123')
+>>> 
+# Option A: Create new admin user
+admin = User(username='admin', email='admin@cinematch.com', is_admin=True)
+admin.set_password('adminpass123')
 db.session.add(admin)
 db.session.commit()
-exit()
-#check any admins accounts in the database
-User.query.filter_by(is_admin=True).all()
+>>> 
+# Option B: Make existing user an admin
+user = User.query.filter_by(username='yourname').first()
+user.is_admin = True
+db.session.commit()
+ 
+ # Verify
+ User.query.filter_by(is_admin=True).all()
+[<admin: admin="">]</admin:>
 """
