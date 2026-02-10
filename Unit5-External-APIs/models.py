@@ -1,33 +1,22 @@
 # ============================================================================
 # models.py - CineMatch Database Models
-# Unit 4 STARTER CODE
 # ============================================================================
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
-
-#TODO:Import UserMixin
 from flask_login import UserMixin
-#TODO:Import Bcrypt
 from flask_bcrypt import Bcrypt
-db = SQLAlchemy()
 
-#TODO: Bcrypt Instance
+db = SQLAlchemy()
 bcrypt = Bcrypt()
 
+
 # ============================================================================
-# USER MODEL - TODO: Complete this model
-# 
-# The User model stores registered users of CineMatch.
-# 
-# IMPORTANT CONCEPTS:
-#   - UserMixin: Provides required methods for Flask-Login
-#   - password_hash: We store a HASH, never the actual password!
-#   - set_password(): Hashes password during registration
-#   - check_password(): Verifies password during login
+# USER MODEL
 # ============================================================================
 
 class User(UserMixin, db.Model):
+    """Registered users of CineMatch"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -47,12 +36,11 @@ class User(UserMixin, db.Model):
 
 
 # ============================================================================
-# MOVIE MODEL (From Unit 3 - No changes needed)
-# Use this as a REFERENCE for the User model columns!
+# MOVIE MODEL
 # ============================================================================
 
 class Movie(db.Model):
-    """Movie Model - represents movie table in database"""
+    """Movie in the CineMatch catalog"""
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     year = db.Column(db.Integer)
@@ -61,31 +49,9 @@ class Movie(db.Model):
     rating = db.Column(db.Float)
     description = db.Column(db.Text)
     poster_url = db.Column(db.String(500))
+    tmdb_id = db.Column(db.Integer, unique=True, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), 
                           default=lambda: datetime.now(timezone.utc))
     
     def __repr__(self):
         return f"<Movie: {self.title} ({self.year})>"
-
-
-
-"""
-# Create an admin user in flask shell
-flask shell
-from models import User, db
->>> 
-# Option A: Create new admin user
-admin = User(username='admin', email='admin@cinematch.com', is_admin=True)
-admin.set_password('adminpass123')
-db.session.add(admin)
-db.session.commit()
->>> 
-# Option B: Make existing user an admin
-user = User.query.filter_by(username='yourname').first()
-user.is_admin = True
-db.session.commit()
- 
- # Verify
- User.query.filter_by(is_admin=True).all()
-[<admin: admin="">]</admin:>
-"""

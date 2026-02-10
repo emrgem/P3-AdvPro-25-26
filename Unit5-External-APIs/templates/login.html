@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Login - CineMatch{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                
+                <!-- Login Card -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        
+                        <!-- Header -->
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold">
+                                <i class="bi bi-box-arrow-in-right text-primary me-2"></i>Welcome Back
+                            </h2>
+                            <p class="text-muted">
+                                Sign in to your CineMatch account
+                            </p>
+                        </div>
+
+                        
+                        <!-- Login Form -->
+                        <form method="POST" action="{{ url_for('login') }}">
+                            
+                            <!-- Username Field -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    Username <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input type="text" 
+                                           name="username" 
+                                           id="username" 
+                                           class="form-control" 
+                                           placeholder="Enter your username"
+                                           required
+                                           autocomplete="username">
+                                </div>
+                            </div>
+                            
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label">
+                                    Password <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <input type="password" 
+                                           name="password" 
+                                           id="password" 
+                                           class="form-control" 
+                                           placeholder="Enter your password"
+                                           required
+                                           autocomplete="current-password">
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+                                </button>
+                            </div>
+                            
+                        </form>
+                        
+                        <!-- Divider -->
+                        <hr class="my-4">
+                        
+                        <!-- Register Link -->
+                        <p class="text-center mb-0">
+                            Don't have an account? 
+                            <a href="{{ url_for('register') }}" class="text-decoration-none fw-bold">
+                                Register here
+                            </a>
+                        </p>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Card hover effect */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    /* Input focus effects */
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    /* Input group styling */
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+    
+    .input-group .form-control {
+        border-left: none;
+    }
+</style>
+{% endblock %}

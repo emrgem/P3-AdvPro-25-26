@@ -1,6 +1,5 @@
 # ============================================================================
 # routes.py - CineMatch Route Definitions
-# UNIT 4 STARTER CODE
 # ============================================================================
 
 from flask import render_template, request, redirect, url_for, flash
@@ -11,16 +10,12 @@ from flask_login import login_user, logout_user, login_required, current_user
 from functools import wraps
 
 def admin_required(f):
-    """
-    Decorator that requires user to be logged in AND be an admin.
-    """
+    """Decorator that requires user to be logged in AND be an admin."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # Check if logged in
         if not current_user.is_authenticated:
             flash('Please log in to access this page.', 'warning')
             return redirect(url_for('login'))
-        # Check if admin
         if not current_user.is_admin:
             flash('Admin access required.', 'error')
             return redirect(url_for('index'))
@@ -32,7 +27,7 @@ def register_routes(app):
     """Register all routes with the Flask app"""
     
     # ========================================================================
-    # HOME & PUBLIC ROUTES (No changes needed)
+    # PUBLIC ROUTES
     # ========================================================================
     
     @app.route('/')
@@ -49,7 +44,7 @@ def register_routes(app):
     
     
     # ========================================================================
-    # MOVIE BROWSE & DETAIL (No changes needed)
+    # MOVIE BROWSE & DETAIL
     # ========================================================================
     
     @app.route('/movies')
@@ -100,7 +95,7 @@ def register_routes(app):
     
     
     # ========================================================================
-    # MOVIE CRUD OPERATIONS (No changes needed)
+    # MOVIE CRUD (Admin Only)
     # ========================================================================
     
     @app.route('/add_movie', methods=['GET', 'POST'])
@@ -218,178 +213,70 @@ def register_routes(app):
     
     
     # ========================================================================
-    # AUTHENTICATION ROUTES - TODO: Complete the registration route
+    # AUTHENTICATION
     # ========================================================================
     
     @app.route('/register', methods=['GET', 'POST'])
     def register():
-        """
-        User registration route
-        
-        GET: Display registration form
-        POST: Process registration, create user account
-        
-        Flow:
-        1. Check if already logged in → redirect to home
-        2. Get form data (username, email, password, confirm_password)
-        3. Validate: all fields required, passwords match, min length
-        4. Check: username not taken, email not taken
-        5. Create user with HASHED password
-        6. Auto-login the new user
-        7. Redirect to home with success message
-        """
-        
-        # ====================================================================
-        # TODO 1: Check if user is already logged in
-        # 
-        # If user is already authenticated, redirect them to home page.
-        # Use: current_user.is_authenticated
-        # ====================================================================
+        """User registration"""
         if current_user.is_authenticated:
             return redirect(url_for("index"))
 
-        
         if request.method == 'POST':
-            # ================================================================
-            # TODO 2: Get form data
-            # 
-            # Get these values from the form:
-            #   - username (strip whitespace)
-            #   - email (strip whitespace, convert to lowercase)
-            #   - password
-            #   - confirm_password
-            #
-            # Pattern: request.form.get('field_name', '').strip()
-            # ================================================================
             username = request.form.get("username")
             email = request.form.get("email")
             password = request.form.get("password")
             confirm_password = request.form.get("confirm_password")
             
-            
-            # ================================================================
-            # TODO 3: Validation - Check required fields
-            # 
-            # If username, email, or password is empty:
-            #   - Flash error message
-            #   - Redirect back to register
-            # ================================================================
             if not username or not email or not password:
                 flash("All fields are required!", 'error')
                 return redirect(url_for("register"))
 
-            
-            # ================================================================
-            # TODO 4: Validation - Check passwords match
-            # 
-            # If password != confirm_password:
-            #   - Flash error message: 'Passwords do not match!'
-            #   - Redirect back to register
-            # ================================================================
             if password != confirm_password:
                 flash("Passwords do not match!", 'error')
                 return redirect(url_for("register"))                
 
-                
-            # ================================================================
-            # TODO 5: Validation - Check password length
-            # 
-            # If password is less than 6 characters:
-            #   - Flash error message
-            #   - Redirect back to register
-            # ================================================================
             if len(password) < 6:
                 flash("Password must be at least 6 characters.", 'error')
                 return redirect(url_for("register"))
             
-            
-            # ================================================================
-            # TODO 6: Check if username already exists
-            # 
-            # Query database to check if username is taken:
-            #   User.query.filter_by(username=username).first()
-            # 
-            # If it returns a user (not None), username is taken.
-            # Flash error and redirect.
-            # ================================================================
             if User.query.filter_by(username=username).first():
                 flash("Username is already taken! Please choose another one.", 'error')
                 return redirect(url_for("register"))
             
-            # ================================================================
-            # TODO 7: Check if email already exists
-            # 
-            # Same pattern as username check above.
-            # ================================================================
             if User.query.filter_by(email=email).first():
                 flash("Email is already registered! Please choose another one.", 'error')
                 return redirect(url_for("register"))            
 
-            
-            
-            # ================================================================
-            # TODO 8: Create new user with HASHED password
-            # 
-            # Steps:
-            #   1. Create User object: User(username=username, email=email)
-            #   2. Hash password: user.set_password(password)
-            #   3. Add to session: db.session.add(user)
-            #   4. Commit: db.session.commit()
-            #
-            # IMPORTANT: Use set_password(), don't set password_hash directly!
-            # ================================================================
-            
-            # Create user object
             user = User(username=username, email=email)
-            # Hash the password (THIS IS THE KEY LINE!)
             user.set_password(password)
-            # Save to database
             db.session.add(user)
             db.session.commit()
             
-            # ================================================================
-            # TODO 9: Auto-login and redirect
-            # 
-            # Steps:
-            #   1. Log in the user: login_user(user)
-            #   2. Flash welcome message
-            #   3. Redirect to home page
-            # ================================================================
-            
-            # Log the user in
             login_user(user)
-            # Success message
             flash(f"Welcome to Cinematch, {username}", 'success')
-            # Redirect to home
             return redirect(url_for('index'))
         
-        
-        # GET request - show the registration form
         return render_template('register.html')
     
     
     @app.route('/login', methods=['GET', 'POST'])
     def login():
-        # If user is already logged in
+        """User login"""
         if current_user.is_authenticated:
             return redirect(url_for("index"))
         
-        # If login form submitted
         if request.method == "POST":
-            # Step1: Get the form data
             username = request.form.get("username", ''). strip()
             password = request.form.get("password", '')
             
-            # Step 2: Look up the user
             user = User.query.filter_by(username=username).first()
             
-            # Step 3 & 4 Verify Password and login
             if user and user.check_password(password):
                 login_user(user)
                 flash(f"Welcome back, {user.username}!", "success")
                 return redirect(url_for("index"))
             else:
-                #Step 5 - Handle Failure
                 flash("Invalid username and password", 'error')
             
         return render_template('login.html')
@@ -398,6 +285,7 @@ def register_routes(app):
     @app.route('/logout')
     @login_required
     def logout():
+        """User logout"""
         logout_user()
         flash("You have been logged out.", 'info')
         return redirect(url_for('index'))
@@ -410,7 +298,7 @@ def register_routes(app):
         return render_template("profile.html", user=current_user)
     
     # ========================================================================
-    # ERROR HANDLERS (No changes needed)
+    # ERROR HANDLERS
     # ========================================================================
     
     @app.errorhandler(404)
