@@ -3,11 +3,12 @@
 # ============================================================================
 
 from flask import render_template, request, redirect, url_for, flash
-from utilities import get_csv_value, parse_year, parse_rating
+from utilities import get_csv_value, parse_year, parse_rating, search_tmdb, get_tmdb_movie, build_poster_url
 import csv
 from models import db, Movie, User
 from flask_login import login_user, logout_user, login_required, current_user
 from functools import wraps
+import requests, os
 
 def admin_required(f):
     """Decorator that requires user to be logged in AND be an admin."""
@@ -297,6 +298,38 @@ def register_routes(app):
         """User profile page"""
         return render_template("profile.html", user=current_user)
     
+    # ========================================================================
+    # TMDB SEARCH & IMPORT
+    # ========================================================================
+    @app.route('/search_tmdb')
+    @admin_required
+    def search_tmdb_page():
+        query = request.args.get('query', '').strip()
+        results = []
+        if query:
+            results = search_tmdb(query)
+        return render_template("search_tmdb.html", results=results, query=query, build_poster_url=build_poster_url)
+
+    @app.route('/import_from_tmdb/<int:tmdb_id>', methods=['POST'])
+    @admin_required
+    def import_from_tmdb(tmdb_id):
+        #check if already imported
+        if Movie.query.filter_by(tmdb_id=tmdb_id).first():
+            flash("This movie is already in the database!", "warning")
+            return redirect(url_for("search_tmdb_page"))
+        #Fetch the full details from TMDB
+        data = get_tmdb_movie(tmdb_id)
+        if not data:
+            flash("Could not fetch the movie from TMDB!", 'error')
+            return redirect(url_for('search_tmdb_page'))
+        # Extract the year from release date ( "2010-07-15 -> 2010")
+        year = None
+        if data.get('release_date') and len(data['release_date'])>=4:
+            year = int(data['release_date'][:4])
+        # Get first genre name
+        genre = None
+        if data.get('genres') and len(data['genres'])>0:
+            genre = data['genres'][0]['name']
     # ========================================================================
     # ERROR HANDLERS
     # ========================================================================
