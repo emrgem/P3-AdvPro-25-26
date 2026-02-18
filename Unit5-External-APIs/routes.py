@@ -330,6 +330,21 @@ def register_routes(app):
         genre = None
         if data.get('genres') and len(data['genres'])>0:
             genre = data['genres'][0]['name']
+        # create a Movie object and save it to database
+        movie = Movie(
+            title = data.get('title', "unknown"),
+            year = year,
+            genre = genre,
+            rating = round(data.get('vote_average', 0), 1),
+            description = data.get('overview'),
+            poster_url = build_poster_url(data.get('poster_path')),
+            tmdb_id = tmdb_id
+        )
+        db.session.add(movie)
+        db.session.commit()
+        flash(f" Imported {movie.title} from TMDB", "success")
+        return redirect(url_for("search_tmdb_page"))           
+            
     # ========================================================================
     # ERROR HANDLERS
     # ========================================================================
