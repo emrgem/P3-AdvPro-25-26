@@ -13,7 +13,7 @@ from routes import register_routes
 from db_init import init_db
 from models import db, Movie, User, bcrypt
 from flask_login import LoginManager, login_user, current_user
-
+from flask_migrate import Migrate
 
 # ============================================================================
 # APP CONFIGURATION
@@ -30,6 +30,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # ============================================================================
 
 db.init_app(app)
+migrate = Migrate(app,db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
