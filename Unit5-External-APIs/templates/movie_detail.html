@@ -135,6 +135,22 @@
 
                         <!-- Action Buttons -->
                         <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
+                            <!-- Favorite Button -->
+                             {% if current_user.is_authenticated %}
+                             {% if movie in current_user.favorite_movies %}
+                                <form method="POST" action="{{url_for('unfavorite', id=movie.id)}}">
+                                    <button class="btn btn-danger">
+                                        <i class="bi bi-heart-fill me-1"></i>Unfavorite
+                                    </button>
+                                </form>
+                             {%else%}
+                                <form method="POST" action="{{url_for('favorite', id=movie.id)}}">
+                                <button class="btn btn-outline-danger">
+                                <i class="bi bi-heart me-1"></i>Favorite
+                                </button>
+                                </form>
+                             {% endif %}
+                             {% endif %}
                             <!-- Back to Movies List -->
                             <a href="{{ url_for('movies_list') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left me-2"></i>Back to Movies

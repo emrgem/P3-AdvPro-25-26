@@ -344,7 +344,28 @@ def register_routes(app):
         db.session.commit()
         flash(f" Imported {movie.title} from TMDB", "success")
         return redirect(url_for("search_tmdb_page"))           
-            
+    
+    @app.route("/favorite/<int:id>", methods=['POST'])
+    @login_required
+    def favorite(id):
+        # Add a movie to the user's favorites
+        movie = Movie.query.get_or_404(id)
+        if movie not in current_user.favorite_movies:
+            current_user.favorite_movies.append(movie)
+            db.session.commit()
+            flash(f'💖 Added "{movie.title}" to favorites!', 'success')
+        return redirect(url_for('movie_detail', id=id))
+    
+    @app.route("/unfavorite/<int:id>", methods=['POST'])
+    @login_required
+    def unfavorite(id):
+        # Remove a movie from the user's favorites
+        movie = Movie.query.get_or_404(id)
+        if movie in current_user.favorite_movies:
+            current_user.favorite_movies.remove(movie)
+            db.session.commit()
+            flash(f'❌ Removed "{movie.title}" from favorites!', 'info')
+        return redirect(url_for('movie_detail', id=id))
     # ========================================================================
     # ERROR HANDLERS
     # ========================================================================
