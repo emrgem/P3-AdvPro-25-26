@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CineMatch{% endblock %}
+
+{% block content %}
+<section class="py-4">
+  <div class="container">
+
+    <!-- Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-1">
+          <i class="bi bi-speedometer2 me-2"></i>My Dashboard
+        </h1>
+        <p class="text-muted mb-0">Welcome back, {{ user.username }}!</p>
+      </div>
+      <a href="{{ url_for('movies_list') }}" class="btn btn-outline-primary">
+        <i class="bi bi-plus-lg me-1"></i>Discover Movies
+      </a>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <i class="bi bi-heart-fill text-danger fs-3"></i>
+          <h2 class="mb-0 mt-2">{{ fav_count }}</h2>
+          <small class="text-muted">Favorites</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <i class="bi bi-bookmark-fill text-info fs-3"></i>
+          <h2 class="mb-0 mt-2">{{ watch_count }}</h2>
+          <small class="text-muted">Watchlist</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <i class="bi bi-tag-fill text-success fs-3"></i>
+          <h2 class="mb-0 mt-2">{{ top_genre or '—' }}</h2>
+          <small class="text-muted">Top Genre</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <i class="bi bi-star-fill text-warning fs-3"></i>
+          <h2 class="mb-0 mt-2">{{ avg_rating }}</h2>
+          <small class="text-muted">Avg Rating</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Favorites Section -->
+    <h3 class="mb-3">
+      <i class="bi bi-heart-fill text-danger me-2"></i>My Favorites
+      {% if fav_count %}<span class="badge bg-danger">{{ fav_count }}</span>{% endif %}
+    </h3>
+
+    {% if favs %}
+    <div class="row g-3 mb-4">
+      {% for movie in favs %}
+      <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+        <a href="{{ url_for('movie_detail', id=movie.id) }}" class="text-decoration-none">
+          <div class="card border-0 shadow-sm h-100 movie-card">
+            <img src="{{ movie.poster_url }}" class="card-img-top"
+                 alt="{{ movie.title }}" style="height: 220px; object-fit: cover;">
+            <div class="card-body p-2">
+              <p class="card-title small fw-bold mb-0 text-dark">{{ movie.title|truncate(25) }}</p>
+              <small class="text-muted">⭐ {{ movie.rating or 'N/A' }}</small>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-light border mb-4">
+      <i class="bi bi-heart me-2"></i>No favorites yet!
+      <a href="{{ url_for('movies_list') }}">Browse movies</a> to start building your collection.
+    </div>
+    {% endif %}
+
+    <!-- Watchlist Section -->
+    <h3 class="mb-3">
+      <i class="bi bi-bookmark-fill text-info me-2"></i>My Watchlist
+      {% if watch_count %}<span class="badge bg-info">{{ watch_count }}</span>{% endif %}
+    </h3>
+
+    {% if watch %}
+    <div class="row g-3 mb-4">
+      {% for movie in watch %}
+      <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+        <a href="{{ url_for('movie_detail', id=movie.id) }}" class="text-decoration-none">
+          <div class="card border-0 shadow-sm h-100 movie-card">
+            <img src="{{ movie.poster_url }}" class="card-img-top"
+                 alt="{{ movie.title }}" style="height: 220px; object-fit: cover;">
+            <div class="card-body p-2">
+              <p class="card-title small fw-bold mb-0 text-dark">{{ movie.title|truncate(25) }}</p>
+              <small class="text-muted">⭐ {{ movie.rating or 'N/A' }}</small>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-light border mb-4">
+      <i class="bi bi-bookmark me-2"></i>Nothing on your watchlist!
+      <a href="{{ url_for('movies_list') }}">Find something</a> to watch next.
+    </div>
+    {% endif %}
+
+    <!-- AI Recommendations Placeholder (Unit 6) -->
+    <div class="card border-0 shadow-sm mb-4"
+         style="background: linear-gradient(135deg, #667eea, #764ba2);">
+      <div class="card-body text-white text-center py-4">
+        <i class="bi bi-robot fs-1"></i>
+        <h4 class="mt-2">AI Recommendations</h4>
+        <p class="mb-0 opacity-75">
+          Coming in Unit 6! Based on your favorites, AI will suggest new movies for you.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .movie-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .movie-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+  }
+  .stat-card {
+    border-radius: 12px;
+  }
+</style>
+{% endblock %}

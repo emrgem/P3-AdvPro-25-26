@@ -6,7 +6,6 @@
 <section class="py-5">
     <div class="container">
         <!-- Breadcrumb Navigation -->
-        <!-- Helps users understand where they are and navigate back -->
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -41,19 +40,16 @@
                     <div class="card-body">
                         <h6 class="card-subtitle mb-3 text-muted">Quick Stats</h6>
                         <div class="d-flex justify-content-around text-center">
-                            <!-- Rating -->
                             <div>
                                 <i class="bi bi-star-fill text-warning fs-4"></i>
                                 <p class="mb-0 fw-bold">{{ movie.rating or 'N/A' }}</p>
                                 <small class="text-muted">Rating</small>
                             </div>
-                            <!-- Year -->
                             <div>
                                 <i class="bi bi-calendar3 text-primary fs-4"></i>
                                 <p class="mb-0 fw-bold">{{ movie.year or 'N/A' }}</p>
                                 <small class="text-muted">Year</small>
                             </div>
-                            <!-- Genre -->
                             <div>
                                 <i class="bi bi-tag text-success fs-4"></i>
                                 <p class="mb-0 fw-bold">{{ movie.genre or 'N/A' }}</p>
@@ -68,10 +64,8 @@
             <div class="col-lg-8 col-md-7">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body p-4">
-                        <!-- Movie Title -->
                         <h1 class="display-5 fw-bold mb-2">{{ movie.title }}</h1>
                         
-                        <!-- Rating Badge -->
                         {% if movie.rating %}
                         <div class="mb-3">
                             <span class="badge bg-warning text-dark fs-5 px-3 py-2">
@@ -85,7 +79,6 @@
                         </div>
                         {% endif %}
 
-                        <!-- Movie Metadata -->
                         <div class="row mb-4">
                             <div class="col-sm-6">
                                 <p class="mb-2">
@@ -119,7 +112,6 @@
                             </div>
                         </div>
 
-                        <!-- Description Section -->
                         <div class="mb-4">
                             <h5 class="border-bottom pb-2 mb-3">
                                 <i class="bi bi-file-text me-2"></i>Plot Summary
@@ -135,33 +127,49 @@
 
                         <!-- Action Buttons -->
                         <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
-                            <!-- Favorite Button -->
-                             {% if current_user.is_authenticated %}
-                             {% if movie in current_user.favorite_movies %}
-                                <form method="POST" action="{{url_for('unfavorite', id=movie.id)}}">
-                                    <button class="btn btn-danger">
-                                        <i class="bi bi-heart-fill me-1"></i>Unfavorite
-                                    </button>
+                            <!-- Favorite Button (Lesson 5.3) -->
+                            {% if current_user.is_authenticated %}
+                              {% if movie in current_user.favorite_movies %}
+                                <form method="POST" action="{{ url_for('unfavorite', id=movie.id) }}">
+                                  <button class="btn btn-danger">
+                                    <i class="bi bi-heart-fill me-1"></i>Unfavorite
+                                  </button>
                                 </form>
-                             {%else%}
-                                <form method="POST" action="{{url_for('favorite', id=movie.id)}}">
-                                <button class="btn btn-outline-danger">
-                                <i class="bi bi-heart me-1"></i>Favorite
-                                </button>
+                              {% else %}
+                                <form method="POST" action="{{ url_for('favorite', id=movie.id) }}">
+                                  <button class="btn btn-outline-danger">
+                                    <i class="bi bi-heart me-1"></i>Favorite
+                                  </button>
                                 </form>
-                             {% endif %}
-                             {% endif %}
+                              {% endif %}
+                            {% endif %}
+
+                            <!-- Watchlist Button (Lesson 5.4) -->
+                            {% if current_user.is_authenticated %}
+                              {% if movie in current_user.watchlist_movies %}
+                                <form method="POST" action="{{ url_for('remove_from_watchlist', id=movie.id) }}">
+                                  <button class="btn btn-info">
+                                    <i class="bi bi-bookmark-fill me-1"></i>On Watchlist
+                                  </button>
+                                </form>
+                              {% else %}
+                                <form method="POST" action="{{ url_for('add_to_watchlist', id=movie.id) }}">
+                                  <button class="btn btn-outline-info">
+                                    <i class="bi bi-bookmark me-1"></i>Add to Watchlist
+                                  </button>
+                                </form>
+                              {% endif %}
+                            {% endif %}
+
                             <!-- Back to Movies List -->
                             <a href="{{ url_for('movies_list') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left me-2"></i>Back to Movies
                             </a>
                             {%if current_user.is_authenticated and current_user.is_admin%}
-                            <!-- Edit Button (for future Lesson 3.4) -->
                             <a href="{{ url_for('edit_movie', id=movie.id) }}" class="btn btn-warning">
                                 <i class="bi bi-pencil me-2"></i>Edit Movie
                             </a>
                             
-                            <!-- Delete Button (for future Lesson 3.4) -->
                             <button type="button" 
                                     class="btn btn-danger" 
                                     data-bs-toggle="modal" 
@@ -177,7 +185,6 @@
 </section>
 
 <!-- Delete Confirmation Modal -->
-<!-- Bootstrap modal for confirming delete action -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -198,7 +205,6 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-1"></i>Cancel
                 </button>
-                <!-- Form for DELETE - uses POST method -->
                 <form action="{{ url_for('delete_movie', id=movie.id) }}" method="POST" class="d-inline">
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-trash me-1"></i>Yes, Delete
@@ -212,16 +218,12 @@
 
 {% block extra_css %}
 <style>
-    /* Hover effect for poster */
     .card-img-top {
         transition: transform 0.3s ease;
     }
-    
     .card:hover .card-img-top {
         transform: scale(1.02);
     }
-    
-    /* Badge styling */
     .badge {
         font-weight: 500;
     }

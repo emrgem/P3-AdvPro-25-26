@@ -3,92 +3,73 @@
 # ============================================================================
 
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timezone
 from flask_login import UserMixin
 from flask_bcrypt import Bcrypt
-from datetime import datetime, timezone
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
+
 # ============================================================================
-# ASSOCIATION TABLE: User ↔ Movie Favorites
+# ASSOCIATION TABLE: User ↔ Movie Favorites (Lesson 5.3)
 # ============================================================================
 
-favorites = db.Table(
-    "favorites",
-    db.Column(
-        "user_id",
-        db.Integer,
-        db.ForeignKey("user.id", ondelete="CASCADE"),
-        primary_key=True,
-    ),
-    db.Column(
-        "movie_id",
-        db.Integer,
-        db.ForeignKey("movie.id", ondelete="CASCADE"),
-        primary_key=True,
-    ),
+favorites = db.Table('favorites',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('movie_id', db.Integer, db.ForeignKey('movie.id'), primary_key=True)
 )
+
+
+# ============================================================================
+# ASSOCIATION TABLE: User ↔ Movie Watchlist (Lesson 5.4)
+# ============================================================================
+
+watchlist = db.Table('watchlist',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('movie_id', db.Integer, db.ForeignKey('movie.id'), primary_key=True)
+)
+
 
 # ============================================================================
 # USER MODEL
 # ============================================================================
 
-
 class User(UserMixin, db.Model):
-    __tablename__ = "user"
-
-    __table_args__ = (
-        db.UniqueConstraint("username", name="uq_user_username"),
-        db.UniqueConstraint("email", name="uq_user_email"),
-    )
-
+    """Registered users of CineMatch"""
     id = db.Column(db.Integer, primary_key=True)
-
-    username = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(120), nullable=False)
-
-    # Password hashes must NOT be unique
-    password_hash = db.Column(db.String(256), nullable=False)
-
-    created_at = db.Column(
-        db.DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
-        nullable=False,
-    )
-
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(256), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), 
+                          default=lambda: datetime.now(timezone.utc))
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
-
-    favorite_movies = db.relationship(
-        "Movie", secondary=favorites, back_populates="favorited_by"
-    )
-
-    # ------------------------
-    # Authentication helpers
-    # ------------------------
-
-    def set_password(self, password: str) -> None:
-        self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
-
-    def check_password(self, password: str) -> bool:
+    
+    # Many-to-many: User ↔ Movie favorites
+    favorite_movies = db.relationship('Movie', secondary=favorites,
+                                      backref='favorited_by')
+    
+    # Many-to-many: User ↔ Movie watchlist
+    watchlist_movies = db.relationship('Movie', secondary=watchlist,
+                                       backref='watchlisted_by')
+    
+    def set_password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    
+    def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
-
-    def __repr__(self) -> str:
-        return f"<User {self.username}>"
+    
+    def __repr__(self):
+        return f'<User {self.username}>'
 
 
 # ============================================================================
 # MOVIE MODEL
 # ============================================================================
 
-
 class Movie(db.Model):
-    __tablename__ = "movie"
-
-    __table_args__ = (db.UniqueConstraint("tmdb_id", name="uq_movie_tmdb_id"),)
-
+    """Movie in the CineMatch catalog"""
     id = db.Column(db.Integer, primary_key=True)
-
     title = db.Column(db.String(200), nullable=False)
     year = db.Column(db.Integer)
     genre = db.Column(db.String(50))
@@ -96,19 +77,9 @@ class Movie(db.Model):
     rating = db.Column(db.Float)
     description = db.Column(db.Text)
     poster_url = db.Column(db.String(500))
-
-    # Nullable but UNIQUE when present
-    tmdb_id = db.Column(db.Integer, nullable=True)
-
-    created_at = db.Column(
-        db.DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
-        nullable=False,
-    )
-
-    favorited_by = db.relationship(
-        "User", secondary=favorites, back_populates="favorite_movies"
-    )
-
-    def __repr__(self) -> str:
-        return f"<Movie {self.title} ({self.year})>"
+    tmdb_id = db.Column(db.Integer, unique=True, nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), 
+                          default=lambda: datetime.now(timezone.utc))
+    
+    def __repr__(self):
+        return f"<Movie: {self.title} ({self.year})>"

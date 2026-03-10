@@ -366,6 +366,68 @@ def register_routes(app):
             db.session.commit()
             flash(f'❌ Removed "{movie.title}" from favorites!', 'info')
         return redirect(url_for('movie_detail', id=id))
+    
+    # ========================================================================
+    # WATCHLIST (Lesson 5.4)
+    # ========================================================================
+    
+    @app.route('/watchlist/add/<int:id>', methods=['POST'])
+    @login_required
+    def add_to_watchlist(id):
+        """Add a movie to the user's watchlist"""
+        movie = Movie.query.get_or_404(id)
+
+        if movie not in current_user.watchlist_movies:
+            current_user.watchlist_movies.append(movie)
+            db.session.commit()
+            flash(f'📋 Added "{movie.title}" to watchlist!', 'success')
+
+        return redirect(url_for('movie_detail', id=id))
+    
+    
+    @app.route('/watchlist/remove/<int:id>', methods=['POST'])
+    @login_required
+    def remove_from_watchlist(id):
+        """Remove a movie from the user's watchlist"""
+        movie = Movie.query.get_or_404(id)
+
+        if movie in current_user.watchlist_movies:
+            current_user.watchlist_movies.remove(movie)
+            db.session.commit()
+            flash(f'Removed "{movie.title}" from watchlist.', 'info')
+
+        return redirect(url_for('movie_detail', id=id))
+    
+    # ========================================================================
+    # DASHBOARD (Lesson 5.5)
+    # ========================================================================
+    @app.route('/dashboard')
+    @login_required
+    def dashboard():
+        user = current_user
+        favs = user.favorite_movies
+        watch = user.watchlist_movies
+        
+        #Stats 
+        fav_count = len(favs)
+        watch_count = len(watch)
+        
+        #Average rating of favorites(only movies that have rating)
+        rated_favs = [movie.rating for movie in favs if movie.rating]
+        avg_rating = round(sum(rated_favs)/len(rated_favs),1) if rated_favs else 0
+        
+        # Top Genre from favorites
+        genres = [movie.genre for movie in favs if movie.genre]
+        top_genre = max(set(genres), key=genres.count) if genres else None
+
+        return render_template('dashboard.html',
+                               user=user,
+                               favs=favs,
+                               watch=watch,
+                               fav_count=fav_count,
+                               watch_count=watch_count,
+                               avg_rating = avg_rating,
+                               top_genre = top_genre)
     # ========================================================================
     # ERROR HANDLERS
     # ========================================================================
