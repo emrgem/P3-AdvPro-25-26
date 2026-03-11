@@ -1,5 +1,5 @@
 # ============================================================================
-# models.py - CineMatch Database Models
+# models.py - CineMatch Database Models (Fixed for SQLite + Alembic)
 # ============================================================================
 
 from flask_sqlalchemy import SQLAlchemy
@@ -12,20 +12,17 @@ bcrypt = Bcrypt()
 
 
 # ============================================================================
-# ASSOCIATION TABLE: User ↔ Movie Favorites (Lesson 5.3)
+# ASSOCIATION TABLE: User ↔ Movie Favorites
 # ============================================================================
 
-favorites = db.Table('favorites',
+favorites = db.Table(
+    'favorites',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('movie_id', db.Integer, db.ForeignKey('movie.id'), primary_key=True)
 )
 
-
-# ============================================================================
-# ASSOCIATION TABLE: User ↔ Movie Watchlist (Lesson 5.4)
-# ============================================================================
-
-watchlist = db.Table('watchlist',
+watchlist = db.Table(
+    'watchlist',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('movie_id', db.Integer, db.ForeignKey('movie.id'), primary_key=True)
 )
@@ -40,25 +37,31 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), 
-                          default=lambda: datetime.now(timezone.utc))
+    password_hash = db.Column(db.String(256), nullable=False)  # no unique constraint
+    created_at = db.Column(
+        db.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc)
+    )
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
-    
+    profile_picture = db.Column(db.String(500), nullable=True)
+
     # Many-to-many: User ↔ Movie favorites
     favorite_movies = db.relationship('Movie', secondary=favorites,
                                       backref='favorited_by')
-    
+
     # Many-to-many: User ↔ Movie watchlist
     watchlist_movies = db.relationship('Movie', secondary=watchlist,
                                        backref='watchlisted_by')
-    
+
+    # ------------------------
+    # Password helpers
+    # ------------------------
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-    
+
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
-    
+
     def __repr__(self):
         return f'<User {self.username}>'
 
@@ -78,8 +81,10 @@ class Movie(db.Model):
     description = db.Column(db.Text)
     poster_url = db.Column(db.String(500))
     tmdb_id = db.Column(db.Integer, unique=True, nullable=True)
-    created_at = db.Column(db.DateTime(timezone=True), 
-                          default=lambda: datetime.now(timezone.utc))
-    
+    created_at = db.Column(
+        db.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc)
+    )
+
     def __repr__(self):
         return f"<Movie: {self.title} ({self.year})>"
