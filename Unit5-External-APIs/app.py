@@ -9,11 +9,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from flask import Flask
+from flask_migrate import Migrate
 from routes import register_routes
 from db_init import init_db
 from models import db, Movie, User, bcrypt
 from flask_login import LoginManager, login_user, current_user
-from flask_migrate import Migrate
+
 
 # ============================================================================
 # APP CONFIGURATION
@@ -24,13 +25,20 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key-please-change
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cinematch.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Profile picture uploads (Lesson 5.6)
+app.config['UPLOAD_FOLDER'] = os.path.join(app.static_folder, 'uploads')
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2 MB max upload size
+
+# Create uploads folder if it doesn't exist
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 
 # ============================================================================
 # INITIALIZE EXTENSIONS
 # ============================================================================
 
 db.init_app(app)
-migrate = Migrate(app,db)
+migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
