@@ -476,6 +476,23 @@ def register_routes(app):
                     current_user.email = new_email
                     db.session.commit()
                     flash("Email Updated!", "success")
+            # Change the password
+            elif action == "change_password":
+                current_pw = request.form.get("current_password", '')
+                new_pw = request.form.get("new_password", '')
+                confirm_pw = request.form.get("confirm_password", '')
+                
+                if not current_user.check_password(current_pw):
+                    flash("Current password is incorrect!", 'error')
+                elif len(new_pw) < 6:
+                    flash("New password must be at least 6 characters.", "error")
+                elif new_pw != confirm_pw:
+                    flash("New passwords do not match!", 'error')
+                else:
+                    current_user.set_password(new_pw)
+                    db.session.commit()
+                    flash("Password changed!", 'success')
+            
             return redirect(url_for("settings"))
 
     # ========================================================================
