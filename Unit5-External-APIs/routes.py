@@ -15,7 +15,8 @@ import csv
 from models import db, Movie, User
 from flask_login import login_user, logout_user, login_required, current_user
 from functools import wraps
-import requests, os
+import requests, os, uuid
+from flask import current_app
 
 
 def admin_required(f):
@@ -493,6 +494,43 @@ def register_routes(app):
                     db.session.commit()
                     flash("Password changed!", 'success')
             
+            elif action == 'update_picture':
+                pic_url = request.form.get('profile_picture', '').strip()
+                file = request.files.get('profile_upload')
+
+                # Delete old uploaded file if exists
+                if current_user.profile_picture and current_user.profile_picture.startswith('/static/uploads/'):
+                    try:
+                        os.remove(current_user.profile_picture.lstrip('/'))
+                    except FileNotFoundError:
+                        pass
+
+                # Valid image extensions
+                valid_exts = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+                # Handle file upload
+                if file and file.filename:
+                    ext = file.filename.rsplit('.', 1)[-1].lower()
+                    if ext in valid_exts:
+                        filename = f"profile_{current_user.id}_{uuid.uuid4().hex[:8]}.{ext}"
+                        file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                        current_user.profile_picture = f"/static/uploads/{filename}"
+                        flash('Profile picture uploaded!', 'success')
+                    else:
+                        flash('Invalid file type. Use PNG, JPG, JPEG, GIF, or WEBP.', 'error')
+
+                # Handle URL
+                elif pic_url:
+                    current_user.profile_picture = pic_url
+                    flash('Profile picture updated!', 'success')
+
+                # Clear picture
+                else:
+                    current_user.profile_picture = None
+                    flash('Profile picture removed.', 'info')
+
+                db.session.commit()
+                
             return redirect(url_for("settings"))
 
     # ========================================================================

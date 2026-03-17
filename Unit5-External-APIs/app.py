@@ -32,7 +32,6 @@ app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2 MB max upload size
 # Create uploads folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-
 # ============================================================================
 # INITIALIZE EXTENSIONS
 # ============================================================================
