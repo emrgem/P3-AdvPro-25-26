@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Search TMDB{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <!-- Page Header -->
+    <h1 class="display-4 fw-bold mb-4 text-center">
+      <i class="bi bi-search me-2"></i>Search TMDB
+    </h1>
+    <p class="text-center text-muted mb-4">
+      Search The Movie Database and import movies to CineMatch
+    </p>
+
+    <!-- Search Form -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-8">
+        <form method="GET" action="{{ url_for('search_tmdb_page') }}">
+          <div class="input-group input-group-lg">
+            <input type="text" name="query" class="form-control"
+                   placeholder="Search for a movie..."
+                   value="{{ query }}">
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-search me-1"></i>Search
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Results Grid -->
+    {% if results %}
+    <h3 class="mb-3">Found {{ results|length }} results</h3>
+    <div class="row g-4">
+      {% for movie in results %}
+      <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <!-- Poster -->
+          <img src="{{ build_poster_url(movie.poster_path) }}"
+               class="card-img-top" alt="{{ movie.title }}"
+               style="height: 350px; object-fit: cover">
+
+          <!-- Movie Info -->
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ movie.title }}</h5>
+            <p class="text-muted small mb-2">
+              <i class="bi bi-calendar3 me-1"></i>
+              {{ movie.release_date[:4] if movie.release_date else 'N/A' }}
+              <span class="ms-3">
+                <i class="bi bi-star-fill text-warning me-1"></i>
+                {{ movie.vote_average|round(1) }}
+              </span>
+            </p>
+            <p class="card-text small flex-grow-1">
+              {% if movie.overview %}
+                {{ movie.overview[:120] }}{% if movie.overview|length > 120 %}...{% endif %}
+              {% else %}
+                <em class="text-muted">No description available</em>
+              {% endif %}
+            </p>
+
+            <!-- Import Button -->
+            <div class="mt-auto">
+              <form method="POST"
+                    action="{{ url_for('import_from_tmdb', tmdb_id=movie.id) }}">
+                <button class="btn btn-success w-100">
+                  <i class="bi bi-download me-1"></i>Import to CineMatch
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% elif query %}
+    <div class="text-center py-5">
+      <i class="bi bi-film" style="font-size: 3em; color: #666;"></i>
+      <p class="text-muted mt-3">No results found for "{{ query }}"</p>
+      <p class="text-muted small">Try a different search term</p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
