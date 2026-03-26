@@ -14,7 +14,6 @@ bcrypt = Bcrypt()
 # ============================================================================
 # ASSOCIATION TABLE: User ↔ Movie Favorites
 # ============================================================================
-
 favorites = db.Table(
     'favorites',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
@@ -26,7 +25,6 @@ watchlist = db.Table(
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('movie_id', db.Integer, db.ForeignKey('movie.id'), primary_key=True)
 )
-
 
 # ============================================================================
 # USER MODEL
@@ -44,11 +42,9 @@ class User(UserMixin, db.Model):
     )
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
     profile_picture = db.Column(db.String(500), nullable=True)
-
     # Many-to-many: User ↔ Movie favorites
     favorite_movies = db.relationship('Movie', secondary=favorites,
                                       backref='favorited_by')
-
     # Many-to-many: User ↔ Movie watchlist
     watchlist_movies = db.relationship('Movie', secondary=watchlist,
                                        backref='watchlisted_by')

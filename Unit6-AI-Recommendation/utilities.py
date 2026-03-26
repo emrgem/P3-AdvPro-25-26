@@ -117,10 +117,10 @@ from google import genai
 import os
 from dotenv import load_dotenv
 # Load environment variables BEFORE other imports
-load_dotenv()
+load_dotenv(override=True)
 # Create a Gemini client (uses GEMINI_API_KEY from .env)
 # gemini_client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
-gemini_client = genai.Client(api_key="AIzaSyC9n22LviKJinDfAFTyqguun70py3LOSis")
+gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 def get_ai_response(prompt):
     """Send a prompt to Gemini and get a text response."""
     try:

@@ -442,6 +442,9 @@ def register_routes(app):
         genres = [movie.genre for movie in favs if movie.genre]
         top_genre = max(set(genres), key=genres.count) if genres else None
 
+        
+        from flask import session #Get AI recommendations from session(if any)
+        ai_recs = session.pop('ai_recommendations', None)
         return render_template(
             "dashboard.html",
             user=user,
@@ -451,6 +454,7 @@ def register_routes(app):
             watch_count=watch_count,
             avg_rating=avg_rating,
             top_genre=top_genre,
+            ai_recs=ai_recs  # pass AI text to template
         )
 
     # ========================================================================
@@ -532,6 +536,31 @@ def register_routes(app):
                 db.session.commit()
                 
             return redirect(url_for("settings"))
+
+    # ========================================================================
+    # AI RECOMMENDATION
+    # ========================================================================
+    @app.route('/recommendations', methods=['POST'])
+    @login_required
+    def recommendations():
+        """Get AI movie recommendations based on favorites"""
+        from utilities import get_movie_recommendations
+        favs = current_user.favorite_movies
+        if not favs:
+            flash("Add some favorites first so AI knows your taste!", "warning")
+            return redirect(url_for('dashboard'))
+        recs = get_movie_recommendations(favs)
+        if recs:
+            flash("🤖 AI recommendations generated!", "success")
+        else:
+            flash("Could not get recommendations. Try again!", "error")
+            recs = None
+        # Store in session so dashboard can display it
+        from flask import session
+        session['ai_recommendations'] = recs
+        return redirect(url_for('dashboard'))
+
+
 
     # ========================================================================
     # ERROR HANDLERS
